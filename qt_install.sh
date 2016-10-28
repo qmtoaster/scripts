@@ -15,7 +15,7 @@ yum -y remove postfix
 # Install secondary repos (epel)
 yum -y install epel-release 
 yum -y install yum-plugin-priorities
-curl -O ftp://ftp.qmailtoaster.com/pub/repo/qmt/CentOS/7/current/noarch/qmt-release-1-3.qt.el7.noarch.rpm
+wget https://github.com/qmtoaster/release/raw/master/qmt-release-1-3.qt.el7.noarch.rpm
 rpm -Uvh qmt-release-1-3.qt.el7.noarch.rpm
 
 # Install QMT dependencies and accessories
