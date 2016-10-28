@@ -42,10 +42,10 @@ RED=$(tput setaf 1)
 GREEN=$(tput setaf 2)
 NORMAL=$(tput sgr0)
 
-wget https://raw.githubusercontent.com/qmtoaster/scripts/master/qt_install.sh
+wget ftp://ftp.qmailtoaster.com/pub/qmail/CentOS7/qmt/scripts/qt_install.sh
 if [ "$?" != "0" ]; then
    echo $RED
-   echo "QMT Installer (qt_install.sh) did not download, download manually from (https://raw.githubusercontent.com/qmtoaster/scripts/master/)."
+   echo "QMT Installer (qt_install.sh) did not download, download manually from (ftp://ftp.qmailtoaster.com/pub/qmail/CentOS7/qmt/scripts/)."
    echo $NORMAL
 else
    chmod 755 qt_install.sh
@@ -60,3 +60,4 @@ shutdown -r now
 
 echo "$me - completed"
 exit 0
+
