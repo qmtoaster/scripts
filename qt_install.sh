@@ -130,7 +130,7 @@ systemctl enable NetworkManager-wait-online.service
 # If this command is not run the ntpd service will not start
 systemctl disable chronyd.service
 # Script to determine all of the necessary toaster daemons
-wget -O /usr/bin/toaststat  wget https://raw.githubusercontent.com/qmtoaster/scripts/master/toaststat
+wget -O /usr/bin/toaststat https://raw.githubusercontent.com/qmtoaster/scripts/master/toaststat
 if [ "$?" = "0" ]; then
    chmod 755 /usr/bin/toaststat
    toaststat
@@ -152,7 +152,7 @@ fi
 # Install Dspam
 read -p "Install dspam [Y/N] : " yesno
 if [ "$yesno" = "Y" ] || [ "$yesno" = "y" ]; then
-   wget ftp://ftp.qmailtoaster.com/pub/qmail/CentOS7/qmt/scripts/dspam/dspamdb.sh
+   wget https://raw.githubusercontent.com/qmtoaster/dsapm/master/dspamdb.sh
    if [ "$?" != "0" ]; then
       echo "Error downloading dspam installer, exiting..."
       exit 1
