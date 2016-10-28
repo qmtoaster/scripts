@@ -1,0 +1,57 @@
+#!/bin/sh
+
+TAB="$(printf '\t')"
+GREEN=$(tput setaf 2)
+RED=$(tput setaf 1)
+NORMAL=$(tput sgr0)
+
+echo $RED
+echo -n "Status of toaster services"
+echo $NORMAL
+qmailctl stat
+echo ""
+
+if [ -f /etc/init.d/clamd ]
+then
+   CLAMD=clamd
+   CLAMS=""
+fi
+if [ -f /usr/lib/systemd/system/clamav-daemon.service ]
+then
+   CLAMD=clamav-daemon.service
+fi
+if [ -f /usr/lib/systemd/system/clamav-daemon.socket ]
+then
+   CLAMS=clamav-daemon.socket
+fi
+
+if [ -d /var/djbdns ]
+then
+   NAMED=djbdns
+else
+   NAMED=named
+fi
+
+# Change freshclam to start under systemd (Turn off SysV first)
+chkconfig freshclam off &> /dev/null
+service freshclam stop &> /dev/null
+systemctl status clamav-freshclam &> /dev/null
+if [ "$?" != "0" ]; then
+   systemctl enable clamav-freshclam
+   systemctl start clamav-freshclam
+fi
+
+SRV="systemd service"
+# Toaster server service status
+sv=($CLAMD $CLAMS clamav-freshclam spamd dovecot mariadb httpd $NAMED vsftpd network acpid atd autofs crond ntpd smartd sshd irqbalance)
+for idx in ${!sv[*]}
+do
+   temp=${sv[$idx]}
+   systemctl status $temp > /dev/null 2>&1
+   ret0=$?
+   if [ "$ret0" = 0 ]; then
+       printf "%s %25.25s %s %s %s %s %s %s\n" "$SRV:" "$temp:" "${TAB}" "[" "$GREEN" "OK" "$NORMAL" "]"
+   else
+       printf "%s %25.25s %s %s %s %s %s %s\n" "$SRV:" "$temp:" "${TAB}" "[" "$RED" "FAILED" "$NORMAL" "]"
+    fi
+done
