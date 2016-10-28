@@ -130,7 +130,7 @@ systemctl enable NetworkManager-wait-online.service
 # If this command is not run the ntpd service will not start
 systemctl disable chronyd.service
 # Script to determine all of the necessary toaster daemons
-wget -O /usr/bin/toaststat  ftp://ftp.whitehorsetc.com/pub/qmail/CentOS7/qmt/scripts/toaststat
+wget -O /usr/bin/toaststat  wget https://raw.githubusercontent.com/qmtoaster/scripts/master/toaststat
 if [ "$?" = "0" ]; then
    chmod 755 /usr/bin/toaststat
    toaststat
