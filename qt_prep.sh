@@ -1,0 +1,62 @@
+#!/bin/bash
+# Eric Broch <ebroch@whitehorsetc.com> 
+#
+# Disable Selinux, update host, install pkgs.
+######################################################################
+# Change Log
+# 10-27-2016  Written by Eric Broch <ebroch@whitehorsetc.com> 
+#             Thanks to Eric Shubert's template
+######################################################################
+
+######################################################################
+# disable SELINUX
+#
+a2_disable_selinux(){
+
+selinux_config=/etc/selinux/config
+
+if [ ! -f "$selinux_config" ]; then
+  echo "$me - $seclinux_config not found"
+  exit 1
+fi
+
+echo "$me - disabling SELINUX ..."
+sed -i$(date +%Y%m%d) -e "s|^SELINUX=.*$|SELINUX=disabled|" $selinux_config
+}
+
+######################################################################
+# main routine begins here
+#
+me=${0##*/}
+myver=v1.0
+echo "$me - $myversion"
+
+a2_disable_selinux
+
+echo "$me - updating all packages (yum update) ..."
+yum clean all
+yum -y update
+yum -y install wget
+
+RED=$(tput setaf 1)
+GREEN=$(tput setaf 2)
+NORMAL=$(tput sgr0)
+
+wget ftp://ftp.qmailtoaster.com/pub/qmail/CentOS7/qmt/scripts/qt_install.sh
+if [ "$?" != "0" ]; then
+   echo $RED
+   echo "QMT Installer (qt_install.sh) did not download, download manually from (ftp://ftp.qmailtoaster.com/pub/qmail/CentOS7/qmt/scripts/)."
+   echo $NORMAL
+else
+   chmod 755 qt_install.sh
+   echo $GREEN
+   echo "QMT Installer (qt_install.sh) is located in `pwd`, run this script after reboot to complete QMT toaster install."
+   echo $NORMAL
+   sleep 2
+fi
+
+echo "$me - rebooting now..."
+shutdown -r now
+
+echo "$me - completed"
+exit 0
