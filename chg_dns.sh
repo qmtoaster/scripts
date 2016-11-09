@@ -110,11 +110,10 @@ if [ "$1" = "djbdns" ]; then
    echo "Installing DJBDNS..."
    systemctl stop named
    yum -y remove bind bind-chroot
-   # Check if repo for djbdns is installed
-   if [ ! -f /etc/yum.repos.d/whtc-qmt.repo ]; then
-      rpm -Uvh ftp://ftp.qmailtoaster.com/pub/repo/qmt/CentOS/7/current/noarch/whtc-qmt-1-1.qt.el7.noarch.rpm
-   fi
-   yum -y install --enablerepo=whtc-qmt-testing djbdns-localcache
+   # Check if repo for djbdns is installed 
+   wget https://github.com/qmtoaster/release/raw/master/qmt-release-1-3.qt.el7.noarch.rpm
+   yum localinstall qmt-release-1-3.qt.el7.noarch.rpm
+   yum -y install --enablerepo=qmt-testing djbdns-localcache
    systemctl start djbdns
    systemctl status djbdns
 fi
