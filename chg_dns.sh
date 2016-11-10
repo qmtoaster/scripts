@@ -2,20 +2,38 @@
 
 #
 #   Script: chg-dns.sh
-# Function: Switches nameserver software between bind and djbdns.
-#           Changes the nameserver to the localhost (127.0.0.1) 
+# Function: Switches nameserver software between bind, pdns, and djbdns.
+#           Changes the nameserver to the localhost (127.0.0.1)
 #           by modifying /etc/resolv.conf and the active interface script:
 #           /etc/sysconfig/network-scripts/ifcfg-'active'.
 #   Author: Eric C. Broch
 #
 #      Use: ./chg-dns.sh bind
 #           ./chg-dns.sh djbdns
+#           ./chg-dns.sh pdns
 #
 #  Warning: This script is not bullet-proof, use at your own risk.
-#  Failure: In event of a failure sets FreeDNS 37.235.1.174 as the 
+#  Failure: In event of a failure sets FreeDNS 37.235.1.174 as the
 #           nameserver.
 #
 
+
+
+# disable SELINUX
+#
+disable_selinux()
+{
+   setenforce 0
+   selinux_config=/etc/selinux/config
+   if [ ! -f "$selinux_config" ]
+   then
+      echo "Selinux Config ($selinux_config) not found..."
+      return 1
+   fi
+   echo "Disabling selinux ..."
+   sed -i$(date +%Y%m%d) -e "s|^SELINUX=.*$|SELINUX=disabled|" $selinux_config
+   return 0
+}
 
 # Test an IP address for validity:
 # Usage:
@@ -39,7 +57,7 @@ function valid_ip()
     fi
     return $stat
 }
-# 
+#
 # Set nameserver in resolv.conf
 #
 function set_resolv()
@@ -47,7 +65,7 @@ function set_resolv()
    valid_ip $1
    ns=`cat /etc/resolv.conf | grep nameserver`
    echo "Before: nameserver in resolv.conf $ns"
-   cat resolv.conf | grep search > /tmp/srch-$$
+   cat /etc/resolv.conf | grep search > /tmp/srch-$$
    cp -p /etc/resolv.conf /etc/resolv.conf.bak
    cat /tmp/srch-$$ > /etc/resolv.conf
    echo "nameserver $1" >> /etc/resolv.conf
@@ -84,33 +102,60 @@ function set_if()
 #
 # Check input paramter
 #
-if [ "$1" != "bind" ] && [ "$1" != "djbdns" ]
+if [ "$1" != "bind" ] && [ "$1" != "djbdns" ] && [ "$1" != "pdns" ]
 then
-   echo "Enter CLI  parameter: bind or djbdns"
+   echo "Enter CLI  parameter: bind, pdns, or djbdns"
    exit
 fi
 
+selnx=`getenforce`
+selnx=`echo "${selnx,,}"`
+if [ "$1" = "djbdns" ] && [ "$selnx" = "enforcing" ]
+then
+   echo "Before the djbdns name service will start Selinux will be disabled. To make change permanent a reboot is necessary"
+   disable_selinux
+   echo "Selinux disabled"
+   sleep 2
+fi
 # Nameserver must be external (not localhost), temporarily, between removal of old, and install of new, nameserver software
 # as yum depends on DNS services
-set_resolv 37.235.1.174 
+set_resolv 37.235.1.174
 # Set active interface DNS (DNS1) to 127.0.0.1. If this is not set, on reboot, the system will revert resolv.conf to the old setting.
 set_if  127.0.0.1
 
-# Install bind and remove djbdns
+# Install pdns and remove djbdns, and bind
+if [ "$1" = "pdns" ]; then
+   echo "Installing Bind..."
+   systemctl stop djbdns
+   systemctl stop named
+   yum -y remove djbdns-localcache
+   yum -y remove bind bind-chroot
+   yum -y install epel-release
+   yum -y install pdns-recursor
+   echo "allow-from=127.0.0.1/8" >> /etc/pdns-recursor/recursor.conf
+   systemctl enable pdns-recursor
+   systemctl start pdns-recursor
+fi
+
+# Install bind and remove djbdns, and pdns
 if [ "$1" = "bind" ]; then
    echo "Installing Bind..."
    systemctl stop djbdns
+   systemctl stop pdns-recursor
    yum -y remove djbdns-localcache
+   yum -y remove pdns-recursor
    yum -y install bind
    systemctl enable named
    systemctl start named
 fi
-# Install djbdns and remove bind
+# Install djbdns and remove bind, and pdns
 if [ "$1" = "djbdns" ]; then
    echo "Installing DJBDNS..."
    systemctl stop named
+   systemctl stop pdns-recursor
    yum -y remove bind bind-chroot
-   # Check if repo for djbdns is installed 
+   yum -y remove pdns-recursor
+   # Check if repo for djbdns is installed
    wget https://github.com/qmtoaster/release/raw/master/qmt-release-1-3.qt.el7.noarch.rpm
    yum -y localinstall qmt-release-1-3.qt.el7.noarch.rpm
    yum -y install --enablerepo=qmt-testing djbdns-localcache
@@ -118,7 +163,7 @@ if [ "$1" = "djbdns" ]; then
    systemctl status djbdns
 fi
 
-# After success set nameserver localally 
+# After success set nameserver localally
 set_resolv 127.0.0.1
 
 echo ""
@@ -132,4 +177,3 @@ if [ "$?" = "1" ]; then
 else
    echo "Local nameserver lookup succeded..."
 fi
-
