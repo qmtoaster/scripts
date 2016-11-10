@@ -3,7 +3,7 @@
 #
 #   Script: chg-dns.sh
 # Function: Switches nameserver software between bind, pdns, and djbdns.
-#           Changes the nameserver to the localhost (127.0.0.1)
+#           Changes the nameserver to the localhost (127.0.0.1) 
 #           by modifying /etc/resolv.conf and the active interface script:
 #           /etc/sysconfig/network-scripts/ifcfg-'active'.
 #   Author: Eric C. Broch
@@ -13,7 +13,7 @@
 #           ./chg-dns.sh pdns
 #
 #  Warning: This script is not bullet-proof, use at your own risk.
-#  Failure: In event of a failure sets FreeDNS 37.235.1.174 as the
+#  Failure: In event of a failure sets FreeDNS 37.235.1.174 as the 
 #           nameserver.
 #
 
@@ -57,7 +57,7 @@ function valid_ip()
     fi
     return $stat
 }
-#
+# 
 # Set nameserver in resolv.conf
 #
 function set_resolv()
@@ -115,11 +115,12 @@ then
    echo "Before the djbdns name service will start Selinux will be disabled. To make change permanent a reboot is necessary"
    disable_selinux
    echo "Selinux disabled"
-   sleep 2
+   sleep 2   
 fi
+
 # Nameserver must be external (not localhost), temporarily, between removal of old, and install of new, nameserver software
 # as yum depends on DNS services
-set_resolv 37.235.1.174
+set_resolv 37.235.1.174 
 # Set active interface DNS (DNS1) to 127.0.0.1. If this is not set, on reboot, the system will revert resolv.conf to the old setting.
 set_if  127.0.0.1
 
@@ -155,7 +156,7 @@ if [ "$1" = "djbdns" ]; then
    systemctl stop pdns-recursor
    yum -y remove bind bind-chroot
    yum -y remove pdns-recursor
-   # Check if repo for djbdns is installed
+   # Check if repo for djbdns is installed 
    wget https://github.com/qmtoaster/release/raw/master/qmt-release-1-3.qt.el7.noarch.rpm
    yum -y localinstall qmt-release-1-3.qt.el7.noarch.rpm
    yum -y install --enablerepo=qmt-testing djbdns-localcache
@@ -163,7 +164,7 @@ if [ "$1" = "djbdns" ]; then
    systemctl status djbdns
 fi
 
-# After success set nameserver localally
+# After success set nameserver localally 
 set_resolv 127.0.0.1
 
 echo ""
@@ -177,3 +178,4 @@ if [ "$?" = "1" ]; then
 else
    echo "Local nameserver lookup succeded..."
 fi
+
