@@ -8,38 +8,29 @@ NORMAL=$(tput sgr0)
 echo $RED
 echo -n "Status of toaster services"
 echo $NORMAL
-qmailctl stat
+[ -f /usr/bin/qmailctl ] && qmailctl stat
 echo ""
 
-if [ -f /etc/init.d/clamd ]
-then
-   CLAMD=clamd
-   CLAMS=""
-fi
-if [ -f /usr/lib/systemd/system/clamav-daemon.service ]
-then
-   CLAMD=clamav-daemon.service
-fi
-if [ -f /usr/lib/systemd/system/clamav-daemon.socket ]
-then
-   CLAMS=clamav-daemon.socket
-fi
-
-if [ -d /var/djbdns ]
-then
-   NAMED=djbdns
-else
-   NAMED=named
-fi
+CLAMS=
+CLAMD=
+[ -f /etc/init.d/clamd ] &&  CLAMD=clamd
+[ -f /usr/lib/systemd/system/clamav-daemon.service ] && CLAMD=clamav-daemon.service
+[ -f /usr/lib/systemd/system/clamav-daemon.socket ] && CLAMS=clamav-daemon.socket
 
 # Change freshclam to start under systemd (Turn off SysV first)
 chkconfig freshclam off &> /dev/null
 service freshclam stop &> /dev/null
 systemctl status clamav-freshclam &> /dev/null
 if [ "$?" != "0" ]; then
-   systemctl enable clamav-freshclam
-   systemctl start clamav-freshclam
+   systemctl enable clamav-freshclam &> /dev/null
+   systemctl start clamav-freshclam &> /dev/null
 fi
+
+NAMED=
+for ns in djbdns named pdns-recursor
+do
+   [ "`systemctl status $ns | grep not-found`" = "" ] && NAMED=$ns
+done
 
 SRV="systemd service"
 # Toaster server service status
