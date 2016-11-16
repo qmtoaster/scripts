@@ -15,8 +15,8 @@ yum -y remove postfix
 # Install secondary repos (epel)
 yum -y install epel-release 
 yum -y install yum-plugin-priorities
-wget https://github.com/qmtoaster/release/raw/master/qmt-release-1-3.qt.el7.noarch.rpm
-rpm -Uvh qmt-release-1-3.qt.el7.noarch.rpm
+wget https://github.com/qmtoaster/release/raw/master/qmt-release-1-4.qt.el7.noarch.rpm
+rpm -Uvh qmt-release-1-4.qt.el7.noarch.rpm
 
 # Install QMT dependencies and accessories
 yum -y install rsync bind-utils bind net-tools zlib-devel mariadb-server mariadb mariadb-devel libev-devel httpd php mrtg expect libidn-devel aspell tmpwatch perl-Time-HiRes \
