@@ -152,7 +152,7 @@ fi
 # Install Dspam
 read -p "Install dspam [Y/N] : " yesno
 if [ "$yesno" = "Y" ] || [ "$yesno" = "y" ]; then
-   wget https://raw.githubusercontent.com/qmtoaster/dsapm/master/dspamdb.sh
+   wget https://raw.githubusercontent.com/qmtoaster/dspam/master/dspamdb.sh
    if [ "$?" != "0" ]; then
       echo "Error downloading dspam installer, exiting..."
       exit 1
