@@ -49,22 +49,18 @@ if [ "$?" != "0" ]; then
    echo "Bad MariaDB administrator password. Exiting..."
    exit 1
 fi
-
-echo ""
 # Install vpopmail
-echo "use vpopmail" | mysql -uroot -p$MYSQLPW &> /dev/null
-[ "$?" = "0" ] && mysqldump -uroot -p$MYSQLPW vpopmail > vpopmail.sql \
-               && echo "drop database vpopmail" | mysql -u root -p$MYSQLPW \
-               && echo "vpopmail db saved to vpopmail.sql and dropped..."
-
-mysqladmin create vpopmail -uroot -p$MYSQLPW
-[ "$?" != "0" ] && echo "vpopmail db not created or already exists" && exit 1
-echo "vpopmail db created"
-mysqladmin -uroot -p$MYSQLPW reload
-mysqladmin -uroot -p$MYSQLPW refresh
-echo "GRANT ALL PRIVILEGES ON vpopmail.* TO vpopmail@localhost IDENTIFIED BY 'SsEeCcRrEeTt'" | mysql -uroot -p$MYSQLPW
-mysqladmin -uroot -p$MYSQLPW reload
-mysqladmin -uroot -p$MYSQLPW refresh
+echo ""
+read -p "If there is a vpopmail database, you are about to destroy it and create a new one. Proceed? [Y/N]:" yesno
+if [ "$yesno" = "Y" ] || [ "$yesno" = "y" ]; then
+   mysqladmin drop vpopmail -uroot -p$MYSQLPW &> /dev/null
+   mysqladmin create vpopmail -uroot -p$MYSQLPW
+   mysqladmin -uroot -p$MYSQLPW reload
+   mysqladmin -uroot -p$MYSQLPW refresh
+   echo "GRANT ALL PRIVILEGES ON vpopmail.* TO vpopmail@localhost IDENTIFIED BY 'SsEeCcRrEeTt'" | mysql -uroot -p$MYSQLPW
+   mysqladmin -uroot -p$MYSQLPW reload
+   mysqladmin -uroot -p$MYSQLPW refresh
+fi
 
 echo ""
 printf $RED
