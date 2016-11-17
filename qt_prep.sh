@@ -22,6 +22,7 @@ fi
 
 echo "$me - disabling SELINUX ..."
 sed -i$(date +%Y%m%d) -e "s|^SELINUX=.*$|SELINUX=disabled|" $selinux_config
+setenforce 0
 }
 
 ######################################################################
