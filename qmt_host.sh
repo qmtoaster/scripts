@@ -53,13 +53,14 @@ function set_if()
       txt=`cat $ifc | grep BOOTPROTO`
       txt1=`cat $ifc | grep IPADDR`
       txt2=`cat $ifc | grep GATEWAY`
-      txt3=`cat $ifc | grep DNS1`
+      txt3=`cat $ifc | grep DNS`
       echo "Before: nameserver IF $txt $txt1 $txt2 $txt3"
+      nmcli con mod $aif ipv6.addresses "" ipv6.gateway "" ipv6.dns "" ipv6.method auto
       nmcli con mod $aif ipv4.addresses $ip/24 ipv4.gateway $gw ipv4.dns $dns ipv4.method manual
       txt=`cat $ifc | grep BOOTPROTO`
       txt1=`cat $ifc | grep IPADDR`
       txt2=`cat $ifc | grep GATEWAY`
-      txt3=`cat $ifc | grep DNS1`
+      txt3=`cat $ifc | grep DNS`
       echo "After: nameserver IF $txt $txt1 $txt2 $txt3"
       systemctl restart network
    fi
