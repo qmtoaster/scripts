@@ -20,6 +20,8 @@
 #  Failure: Set up the network manually.
 #
 
+GREEN=$(tput setaf 2)
+NORMAL=$(tput sgr0)
 
 # This script was written to change IPv4 parameters (hostname, address, subnet mask, gateway, and dns) on
 # my boxed standard CentOS 7 VM, but can be used on any CentOS 7 host.
@@ -43,6 +45,7 @@ function valid_ip()
 # Set IPv4 interface parameters
 function set_if()
 {
+   [ ! -f /usr/bin/nmcli1 ] && echo $GREEN && echo "Network Manager must be installed to continue, installing..." && echo $NORMAL && sleep 2 && yum -y install NetworkManager
    ip=$1
    gw=$2
    dns=$3
@@ -83,6 +86,7 @@ then
    echo ""
    exit
 fi
+
 
 hn=$1
 ip=$2
