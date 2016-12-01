@@ -45,7 +45,7 @@ function valid_ip()
 # Set IPv4 interface parameters
 function set_if()
 {
-   [ ! -f /usr/bin/nmcli1 ] && echo $GREEN && echo "Network Manager must be installed to continue, installing..." && echo $NORMAL && sleep 2 && yum -y install NetworkManager
+   [ ! -f /usr/bin/nmcli ] && echo $GREEN && echo "Network Manager must be installed to continue, installing..." && echo $NORMAL && sleep 2 && yum -y install NetworkManager
    ip=$1
    gw=$2
    dns=$3
