@@ -19,7 +19,10 @@
 #
 #  Failure: Set up the network manually.
 #
-
+#  Updates:
+#  
+#  Added install of NetworkManager necessary to run nmcli 12-1-2016
+#
 GREEN=$(tput setaf 2)
 NORMAL=$(tput sgr0)
 
