@@ -1,5 +1,18 @@
 #!/bin/sh
-
+#
+#   Script: toaststat
+# Function: This script was written to display QMT services' status.
+#
+#   Author: Eric C. Broch
+#
+#      Use: toaststat
+#
+#  Warning: This script is not bullet-proof, use at your own risk.
+#
+#  Failure: Re-run
+#
+#  Updates:
+#  
 TAB="$(printf '\t')"
 GREEN=$(tput setaf 2)
 RED=$(tput setaf 1)
