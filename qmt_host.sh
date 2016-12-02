@@ -1,7 +1,7 @@
 #!/bin/sh
 
 #
-#   Script: qmt-host.sh
+#   Script: qmt_host.sh
 # Function: This script was written to change IPv4 parameters
 #           (hostname, address, subnet mask, gateway, and dns)
 #           on my boxed standard CentOS 7 VM.
