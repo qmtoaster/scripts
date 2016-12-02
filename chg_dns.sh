@@ -1,7 +1,7 @@
 #!/bin/sh
 
 #
-#   Script: chg-dns.sh
+#   Script: chg_dns.sh
 # Function: Switches nameserver software between bind, pdns, and djbdns.
 #           Changes the nameserver to the localhost (127.0.0.1) 
 #           by modifying /etc/resolv.conf and the active interface script:
@@ -78,6 +78,11 @@ function set_resolv()
 #
 function set_if()
 {
+ [ ! -f /usr/bin/nmcli ] && echo $GREEN \
+                           && echo "Network Manager must be installed to continue, installing..." \
+                           && echo $NORMAL && sleep 2 \
+                           && yum -y install NetworkManager
+                           
    aif=`nmcli connection show --active | grep ethernet | cut -d' ' -f1`
    ifc=/etc/sysconfig/network-scripts/ifcfg-$aif
    valid_ip $1
