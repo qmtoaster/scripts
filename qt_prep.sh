@@ -43,6 +43,8 @@ RED=$(tput setaf 1)
 GREEN=$(tput setaf 2)
 NORMAL=$(tput sgr0)
 
+wget https://raw.githubusercontent.com/qmtoaster/scripts/master/qmt_host.sh
+chmod 755 qmt_host.sh
 wget https://raw.githubusercontent.com/qmtoaster/scripts/master/qt_install.sh
 if [ "$?" != "0" ]; then
    echo $RED
@@ -55,7 +57,6 @@ else
    echo $NORMAL
    sleep 2
 fi
-
 echo "$me - rebooting now..."
 shutdown -r now
 
