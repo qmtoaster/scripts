@@ -1,5 +1,18 @@
 #!/bin/sh
-
+#
+#   Script: qt_install.sh
+# Function: This script was written to install Qmailtoaster on CentOS 7 host.
+#
+#   Author: Eric C. Broch
+#
+#      Use: ./qt_install.sh
+#
+#  Warning: This script is not bullet-proof, use at your own risk.
+#
+#  Failure: Re-run
+#
+#  Updates:
+#  
 TAB="$(printf '\t')"
 GREEN=$(tput setaf 2)
 RED=$(tput setaf 1)
