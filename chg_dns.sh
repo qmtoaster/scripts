@@ -78,9 +78,10 @@ function set_resolv()
 #
 function set_if()
 {
- [ ! -f /usr/bin/nmcli ] && echo $GREEN \
+   [ ! -f /usr/bin/nmcli ] && echo $GREEN \
                            && echo "Network Manager must be installed to continue, installing..." \
-                           && echo $NORMAL && sleep 2 \
+                           && echo $NORMAL \
+                           && sleep 2 \
                            && yum -y install NetworkManager
                            
    aif=`nmcli connection show --active | grep ethernet | cut -d' ' -f1`
