@@ -8,9 +8,9 @@
 #           /etc/sysconfig/network-scripts/ifcfg-'active'.
 #   Author: Eric C. Broch
 #
-#      Use: ./chg-dns.sh bind
-#           ./chg-dns.sh djbdns
-#           ./chg-dns.sh pdns
+#      Use: ./chg_dns.sh bind
+#           ./chg_dns.sh djbdns
+#           ./chg_dns.sh pdns
 #
 #  Warning: This script is not bullet-proof, use at your own risk.
 #  Failure: In event of a failure sets FreeDNS 37.235.1.174 as the 
