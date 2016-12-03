@@ -8,7 +8,7 @@
 #
 #   Author: Eric C. Broch
 #
-#      Use: ./qmt-host.sh hostname ipv4.address ipv4.gateway ipv4.dns (ipv4.dns optional)
+#      Use: ./qmt_host.sh hostname ipv4.address ipv4.gateway ipv4.dns (ipv4.dns optional)
 #
 #  Warning: This script is not bullet-proof, use at your own risk.
 #           It is best to use this script in the console as you most
