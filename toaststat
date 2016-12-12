@@ -42,7 +42,7 @@ fi
 NAMED=
 for ns in djbdns named pdns-recursor
 do
-   [ "`systemctl status $ns | grep not-found`" = "" ] && NAMED=$ns
+    [[ "`systemctl status $ns`" == *"Loaded"* ]] && NAMED=$ns
 done
 
 SRV="systemd service"
