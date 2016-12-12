@@ -14,7 +14,7 @@
 #           It is best to use this script in the console as you most
 #           likely will be changing the IPv4 address. All changes will
 #           be made, but you will be disconnected from the host.
-#           The DNS setting will be set to FreeDNS server 37.235.1.174
+#           The DNS setting will be set to OpenDNS server 208.67.222.222
 #           if none is provided on the command line.
 #
 #  Failure: Set up the network manually.
@@ -98,7 +98,7 @@ fi
 hn=$1
 ip=$2
 gw=$3
-dns="37.235.1.174"
+dns="208.67.222.222"
 if [ ! -z "$4" ]
 then
    dns=$4
