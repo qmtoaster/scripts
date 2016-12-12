@@ -13,7 +13,7 @@
 #           ./chg_dns.sh pdns
 #
 #  Warning: This script is not bullet-proof, use at your own risk.
-#  Failure: In event of a failure sets FreeDNS 37.235.1.174 as the 
+#  Failure: In event of a failure sets OpenDNS 208.67.222.222 as the 
 #           nameserver.
 #
 
@@ -126,7 +126,7 @@ fi
 
 # Nameserver must be external (not localhost), temporarily, between removal of old, and install of new, nameserver software
 # as yum depends on DNS services
-set_resolv 37.235.1.174 
+set_resolv 208.67.222.222 
 # Set active interface DNS (DNS1) to 127.0.0.1. If this is not set, on reboot, the system will revert resolv.conf to the old setting.
 set_if  127.0.0.1
 
@@ -179,8 +179,8 @@ echo "Testing the local nameserver..."
 nslookup msn.com
 if [ "$?" = "1" ]; then
    echo "Local nameserver lookup failed, changing to external nameserver @ FreeDNS 37.235.1.174 ..."
-   set_resolv 37.235.1.174
-   set_if 37.235.1.174
+   set_resolv 208.67.222.222
+   set_if 208.67.222.222
 else
    echo "Local nameserver lookup succeded..."
 fi
