@@ -37,7 +37,7 @@ perl-ExtUtils-MakeMaker perl-Archive-Tar perl-Digest-SHA perl-HTML-Parser perl-I
 perl-Digest-SHA1 perl-Encode-Detect perl-Geo-IP perl-IO-Socket-SSL perl-Mail-DKIM  perl-Razor-Agent perl-Sys-Syslog perl-Net-CIDR-Lite perl-DB_File \
 bzip2-devel check-devel curl-devel gmp-devel ncurses-devel libxml2-devel python-devel sqlite-devel postgresql-devel openldap-devel quota-devel libcap-devel \
 pam-devel clucene-core-devel expat-devel emacs ocaml procmail wget logwatch vsftpd acpid acpid-sysvinit at autofs ntp smartmontools mod_ssl fail2ban perl-Sys-Hostname-Long \
-perl-Mail-DomainKeys perl-Mail-SPF-Query
+perl-Mail-DomainKeys perl-Mail-SPF-Query nfs-utils
 
 
 # Set up the db server
