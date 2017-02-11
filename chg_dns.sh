@@ -163,8 +163,8 @@ if [ "$1" = "djbdns" ]; then
    yum -y remove bind bind-chroot
    yum -y remove pdns-recursor
    # Check if repo for djbdns is installed 
-   wget https://github.com/qmtoaster/release/raw/master/qmt-release-1-3.qt.el7.noarch.rpm
-   yum -y localinstall qmt-release-1-3.qt.el7.noarch.rpm
+   wget https://github.com/qmtoaster/release/raw/master/qmt-release-1-4.qt.el7.noarch.rpm
+   yum -y localinstall qmt-release-1-4.qt.el7.noarch.rpm
    yum -y install djbdns-localcache
    systemctl start djbdns
    systemctl status djbdns
