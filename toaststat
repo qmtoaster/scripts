@@ -54,8 +54,11 @@ cat /etc/vsftpd/vsftpd.conf | grep listen=NO &> /dev/null
 SRV="systemd service"
 STAT=
 COLOR=
+IRQBALANCE=
+proc=`lscpu | grep ^CPU\(s\): | sed 's/CPU(s)://g' | tr -d '[:space:]'`
+[ $proc -gt 1 ] && IRQBALANCE=irqbalance
 # Toaster server service status
-for sv in $CLAMD $CLAMS clamav-freshclam spamd dovecot mariadb httpd $NAMED ntpd sshd network crond $VSFTPD acpid atd autofs smartd irqbalance
+for sv in $CLAMD $CLAMS clamav-freshclam spamd dovecot mariadb httpd $NAMED ntpd sshd network crond $VSFTPD acpid atd autofs smartd $IRQBALANCE
 do
    systemctl status $sv &> /dev/null
    [ "$?" = "0" ] && COLOR=$GREEN STAT=OK || COLOR=$RED STAT=FAILED
