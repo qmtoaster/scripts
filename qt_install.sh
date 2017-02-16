@@ -158,7 +158,7 @@ read -p "Enter a domain? [Y/N] : " yesno
 if [ "$yesno" = "Y" ] || [ "$yesno" = "y" ]; then
    /home/vpopmail/bin/vadddomain
    read -p "Enter domain: " newdom
-   read -p "Enter postmaster@$newdom password: " newpass
+   read -s -p "Enter postmaster@$newdom password: " newpass
    if [ -z "$newdom" ] || [ -z "$newpass" ]; then
       echo "Empty username or password."
    else
