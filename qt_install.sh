@@ -92,7 +92,7 @@ sleep 7
 
 # Install QMT
 yum -y install daemontools ucspi-tcp libsrs2 libsrs2-devel vpopmail spamdyke qmail autorespond control-panel ezmlm ezmlm-cgi qmailadmin qmailmrtg maildrop \
-maildrop-devel isoqlog vqadmin squirrelmail spamassassin clamav ripmime simscan mailman mailman-debuginfo dovecot libdomainkeys-devel
+maildrop-devel isoqlog vqadmin squirrelmail spamassassin clamav ripmime simscan mailman mailman-debuginfo dovecot libdomainkeys-devel qmt-plus
 
 # Open ports on firewall
 systemctl start firewalld
