@@ -30,7 +30,7 @@ setenforce 0
 #
 me=${0##*/}
 myver=v1.0
-echo "$me - $myversion"
+echo "$me - $myver"
 
 a2_disable_selinux
 
