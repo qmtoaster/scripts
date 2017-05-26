@@ -16,8 +16,8 @@ a2_disable_selinux(){
 selinux_config=/etc/selinux/config
 
 if [ ! -f "$selinux_config" ]; then
-  echo "$me - $seclinux_config not found"
-  exit 1
+  echo "$me - $selinux_config not found, continuing..."
+  return
 fi
 
 echo "$me - disabling SELINUX ..."
