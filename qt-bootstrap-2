@@ -1,0 +1,31 @@
+#!/bin/bash
+# Copyright (C) Eric Shubert <eric@datamatters.us>
+#
+# script to do secondary bootstrap processing (install yum priorities, QMT repo)
+######################################################################
+# Change Log
+# 12/26/13 written by Eric 'shubes' <ejs@shubes.net>
+######################################################################
+
+######################################################################
+# main routine begins here
+#
+me=${0##*/}
+myver=v1.0
+echo "$me - $myversion" 
+
+# install yum-priorities
+echo "$me - installing yum-priorities (plugin) ..."
+yum -y install yum-priorities
+
+# install qmailtoaster-release
+qmt_release_pkg=qmailtoaster-release-2.0-2.qt.nodist.noarch.rpm
+echo "$me - installing $qmt_release_pkg (repo) ..."
+rpm -ivh http://mirror2.qmailtoaster.com/current/nodist/$qmt_release_pkg
+
+# install qmailtoaster-util (scripts)
+echo "$me - installing qmailtoaster-util (scripts) ..."
+yum -y install --nogpgcheck qmailtoaster-util
+
+echo "$me - completed"
+exit 0

@@ -1,0 +1,102 @@
+#!/bin/sh
+#  Copyright (C) 2013 - Eric Shubert <eric@datamatters.us>
+#
+#  Install QMailToaster packages and configure host
+########################################################################
+# Change Log
+# 12/27/13 shubes - created
+# 10/28/16 Eric Broch - Modified (rpmforge moved to a new master: http://mirror-status.repoforge.org/) reflected in this script.
+#                     - Rearranged
+#                     - Added bind, bind-utils install
+#                     - Localhost name resolution
+#
+########################################################################
+
+########################################################################
+# install os packages we want that aren't part of the minimal install
+#
+a1_install_non_minimal_os(){
+
+yum -y install man ntp bind-utils epel-release bind
+
+# setup ntp daemon
+chkconfig ntpd on
+service ntpd start
+}
+
+########################################################################
+# install repoforge release reflecting new mirrors
+#
+a3_install_repoforge() {
+
+repoarch=i386
+[[ "$QTARCH" == *"x86_64"* ]] && repoarch=x86_64
+wget ftp://rpmfind.net/linux/dag/redhat/el6/en/$repoarch/dag/RPMS/rpmforge-release-0.5.3-1.el6.rf.$QTARCH.rpm
+yum -y localinstall rpmforge-release-0.5.3-1.el6.rf.$QTARCH.rpm
+}
+
+# install the QMT packages
+#
+a4_install_qmt_packages(){
+
+echo "$me - installing the QMailToaster packages ..."
+echo "$me - please be patient, especially with clamav and qmail ..."
+
+yum -y --nogpgcheck install \
+      simscan \
+      dovecot \
+      vqadmin \
+      qmailadmin \
+      isoqlog \
+      qmailmrtg \
+      send-emails \
+      squirrelmail
+}
+
+########################################################################
+# install nameserver
+#
+a6_change_nameserver(){
+
+cp -p /etc/resolv.conf /etc/resolv.conf.bak
+cat /etc/resolv.conf.bak | grep -v nameserver > /etc/resolv.conf
+echo "nameserver 127.0.0.1" >> /etc/resolv.conf
+service named start
+
+}
+
+########################################################################
+# main processing begins here
+#
+me=${0##*/}
+myver=v1.0
+
+. qt-whatami -s
+
+if [ $? -ne 0 ]; then
+  qt-whatami
+  echo "$me - qt-whatami failed"
+  exit 1
+fi
+
+a1_install_non_minimal_os
+
+a3_install_repoforge
+
+a4_install_qmt_packages
+
+a6_change_nameserver
+
+qt-mysql-secure-vpopmail
+echo ""
+
+# setup web server
+echo "Starting services..."
+chkconfig httpd on
+service httpd start
+service dovecot start
+qmtstarted=`qmailctl stat`
+[[ "$qmtstarted" == *"not running"* || "$qmtstarted" == *"unable to open supervise"* ]] && qmailctl start && sleep 1
+qmailctl stat
+
+exit 0
