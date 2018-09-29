@@ -17,7 +17,7 @@
 #
 a1_install_non_minimal_os(){
 
-yum -y install man ntp bind-utils epel-release bind
+yum -y install man ntp bind-utils epel-release bind mod_ssl openssl
 
 # setup ntp daemon
 chkconfig ntpd on
