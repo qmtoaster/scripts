@@ -182,7 +182,7 @@ if [ "$yesno" = "Y" ] || [ "$yesno" = "y" ]; then
    fi
 fi
 echo "Enable QMT man pages..."
-# echo "MANDATORY_MANPATH /var/qmail/man" >> /etc/man_db.conf
+echo "MANDATORY_MANPATH /var/qmail/man" >> /etc/man_db.conf
 
 echo "CentOS 7 QMT installation complete"
 end=`date`
