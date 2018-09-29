@@ -26,6 +26,7 @@ rpm -ivh http://mirror2.qmailtoaster.com/current/nodist/$qmt_release_pkg
 # install qmailtoaster-util (scripts)
 echo "$me - installing qmailtoaster-util (scripts) ..."
 yum -y install --nogpgcheck qmailtoaster-util
+curl https://raw.githubusercontent.com/qmtoaster/scripts/master/qt-install>/opt/qmailtoaster-util/bin/qt-install
 
 echo "$me - completed"
 exit 0
