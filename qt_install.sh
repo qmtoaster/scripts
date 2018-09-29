@@ -181,6 +181,9 @@ if [ "$yesno" = "Y" ] || [ "$yesno" = "y" ]; then
       echo "Error installing dspam"
    fi
 fi
+echo "Enable QMT man pages..."
+# echo "MANDATORY_MANPATH /var/qmail/man" >> /etc/man_db.conf
+
 echo "CentOS 7 QMT installation complete"
 end=`date`
 echo "Start: $begin"
