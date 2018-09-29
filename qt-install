@@ -7,7 +7,7 @@
 # 12/27/13 shubes - created
 # 10/28/16 Eric Broch - Modified (rpmforge moved to a new master: http://mirror-status.repoforge.org/) reflected in this script.
 #                     - Rearranged
-#                     - Added bind, bind-utils install
+#                     - Added bind, bind-utils, mod_ssl, openssl on install
 #                     - Localhost name resolution
 #
 ########################################################################
