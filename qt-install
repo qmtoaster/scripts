@@ -93,6 +93,9 @@ echo ""
 # setup web server
 echo "Starting services..."
 chkconfig httpd on
+chkconfig dovecot on
+chkconfig iptables off
+service iptables stop
 service httpd start
 service dovecot start
 qmtstarted=`qmailctl stat`
