@@ -90,6 +90,10 @@ a6_change_nameserver
 qt-mysql-secure-vpopmail
 echo ""
 
+echo "Make Dovecot plain/login only, for squirrelmail..."
+sed -i -e 's/digest-md5//g' -e 's/cram-md5//g' /etc/dovecot/toaster.conf
+service dovecot stop
+
 # setup web server
 echo "Starting services..."
 chkconfig httpd on
