@@ -75,7 +75,19 @@ qmailctl start && \
   systemctl enable clamav-daemon.service clamav-daemon.socket clamav-freshclam dovecot spamassassin httpd chronyd acpid atd autofs smartd && \
   wget -O /usr/bin/toaststat http://www.qmailtoaster.org/toaststat.rhel8 && chmod 755 /usr/bin/toaststat && toaststat
 
-# Add domain and run
+# Enter domain
+read -p "Enter a domain? [Y/N] : " yesno
+if [ "$yesno" = "Y" ] || [ "$yesno" = "y" ]; then
+   /home/vpopmail/bin/vadddomain
+   read -p "Enter domain: " newdom
+   read -s -p "Enter postmaster@$newdom password: " newpass
+   echo ""
+   if [ -z "$newdom" ] || [ -z "$newpass" ]; then
+      echo "Empty username or password."
+   else
+      /home/vpopmail/bin/vadddomain $newdom $newpass
+   fi
+fi
 sh /usr/share/toaster/isoqlog/bin/cron.sh
 
 # Add access to QMT administration from desired network or hosts
