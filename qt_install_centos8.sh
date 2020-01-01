@@ -86,9 +86,9 @@ if [ "$yesno" = "Y" ] || [ "$yesno" = "y" ]; then
       echo "Empty username or password."
    else
       /home/vpopmail/bin/vadddomain $newdom $newpass
+      sh /usr/share/toaster/isoqlog/bin/cron.sh
    fi
 fi
-sh /usr/share/toaster/isoqlog/bin/cron.sh
 
 # Add access to QMT administration from desired network or hosts
 sed -i -e 's/Define aclnet "127.0.0.1"/Define aclnet "192.168.2.0\/24 192.168.9.0\/24 127.0.0.1"/' /etc/httpd/conf/toaster.conf && \
