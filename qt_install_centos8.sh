@@ -45,6 +45,7 @@ if [ -z "$password" ]; then
    echo "Empty password, exiting..."
    exit 1
 fi
+echo "\n"
 MYSQLPW=$password
 credfile=~/sql.cnf
 echo -e "[client]\nuser=root\npassword=$MYSQLPW\nhost=localhost" > $credfile
