@@ -46,6 +46,27 @@ if [ -z "$password" ]; then
    exit 1
 fi
 MYSQLPW=$password
+credfile=~/sql.cnf
+echo -e "[client]\nuser=root\npassword=$MYSQLPW\nhost=localhost" > $credfile
+echo "Starting $DBD Server..."
+systemctl start $DBD && systemctl enable $DBD && systemctl status $DBD
+echo "Started $DBD Server"
+sleep 2
+echo "Setting $DBD admin password..."
+mysqladmin -uroot password $MYSQLPW &> /dev/null
+echo "Admin password set"
+echo "Creating vpopmail database..."
+mysqladmin --defaults-extra-file=$credfile reload
+mysqladmin --defaults-extra-file=$credfile refresh
+mysqladmin --defaults-extra-file=$credfile create vpopmail
+mysqladmin --defaults-extra-file=$credfile reload
+mysqladmin --defaults-extra-file=$credfile refresh
+echo "Adding vpopmail users and privileges..."
+mysql --defaults-extra-file=$credfile -e "CREATE USER vpopmail@localhost IDENTIFIED BY 'SsEeCcRrEeTt'"
+mysql --defaults-extra-file=$credfile -e "GRANT ALL PRIVILEGES ON vpopmail.* TO vpopmail@localhost"
+mysqladmin --defaults-extra-file=$credfile reload
+mysqladmin --defaults-extra-file=$credfile refresh
+echo "Done with vpopmail database..."
 
 # Add repos
 curl -o /etc/yum.repos.d/qmt.repo  http://www.qmailtoaster.org/qmt-rhel8.repo && cat /etc/yum.repos.d/*.repo
@@ -54,21 +75,6 @@ curl -o /etc/yum.repos.d/qmt.repo  http://www.qmailtoaster.org/qmt-rhel8.repo &&
 yum-config-manager qmt-testing --set-enabled && \
   yum -y install daemontools ucspi-tcp libsrs2 libsrs2-devel vpopmail spamdyke simscan qmail autorespond control-panel ezmlm \
   ezmlm-cgi qmailadmin qmailmrtg maildrop maildrop-devel isoqlog vqadmin squirrelmail clamav ripmime dovecot
-
-# Add vpopmail DB to backend
-DB=`cat /etc/yum/vars/db` && [[ "$DB" == *mysql* ]] && DBD="${DB}d" || DBD="${DB}" && echo "Backend: $DB $DBD"
-MYSQLPW=mysqlpasswd && \
-  systemctl start $DBD && systemctl enable $DBD && systemctl status $DBD && \
-  mysqladmin -uroot password $MYSQLPW && \
-  mysqladmin -uroot -p$MYSQLPW reload && \
-  mysqladmin -uroot -p$MYSQLPW refresh && \
-  mysqladmin create vpopmail -uroot -p$MYSQLPW && \
-  mysqladmin -uroot -p$MYSQLPW reload && \
-  mysqladmin -uroot -p$MYSQLPW refresh && \
-  echo "CREATE USER vpopmail@localhost IDENTIFIED BY 'SsEeCcRrEeTt'" | mysql -uroot -p$MYSQLPW && \
-  echo "GRANT ALL PRIVILEGES ON vpopmail.* TO vpopmail@localhost" | mysql -uroot -p$MYSQLPW && \
-  mysqladmin -uroot -p$MYSQLPW reload && \
-  mysqladmin -uroot -p$MYSQLPW refresh
 
 qmailctl start && \
   systemctl start clamav-daemon.service clamav-daemon.socket clamav-freshclam dovecot spamassassin httpd chronyd acpid atd autofs smartd && \
