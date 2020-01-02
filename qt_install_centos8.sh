@@ -95,7 +95,7 @@ sed -i -e 's/Define aclnet "127.0.0.1"/Define aclnet "192.168.2.0\/24 192.168.9.
   systemctl reload httpd
 
 # Add roundcube support
- echo "Adding roundcubemail support...
+ echo "Adding roundcubemail support..."
  echo "create database roundcube character set utf8 collate utf8_bin" | mysql -uroot -p$MYSQLPW
  echo "GRANT ALL ON roundcube.* TO roundcube@localhost IDENTIFIED BY 'p4ssw3rd'" | mysql -uroot -p$MYSQLPW
  mysql -uroot -p$MYSQLPW roundcube < /usr/share/roundcubemail/SQL/mysql.initial.sql
