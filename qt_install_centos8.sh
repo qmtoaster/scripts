@@ -39,6 +39,8 @@ DB=`cat /etc/yum/vars/db` && [[ "$DB" == *mysql* ]] && DBD="${DB}d" || DBD="${DB
 
 echo "Using $DBD backend..."
 
+yum -y install $DBD $DB
+
 # MySQL admin password
 read -s -p "Enter $DBD password: " password
 if [ -z "$password" ]; then
