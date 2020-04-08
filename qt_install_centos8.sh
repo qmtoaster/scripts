@@ -72,7 +72,7 @@ mysqladmin --defaults-extra-file=$credfile refresh
 echo "Done with vpopmail database..."
 
 # Add repos
-curl -o /etc/yum.repos.d/qmt.repo  http://www.qmailtoaster.org/qmt-rhel8.repo && cat /etc/yum.repos.d/*.repo
+curl -o /etc/yum.repos.d/qmt.repo  https://raw.githubusercontent.com/qmtoaster/mirrorlist/master/qmt-centos8.repo && cat /etc/yum.repos.d/*.repo
 
 # Install Qmail
 yum-config-manager qmt-testing --set-enabled && \
