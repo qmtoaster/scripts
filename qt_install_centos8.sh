@@ -121,3 +121,10 @@ if [ "$?" = "0" ]; then
    toaststat
 fi
 
+yum --enablerepo=qmt-devel update
+
+qmailctl stop
+qmailctl start
+qmailctl stat
+
+
