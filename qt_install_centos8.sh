@@ -115,5 +115,9 @@ sed -i -e 's/Define aclnet "127.0.0.1"/Define aclnet "192.168.2.0\/24 192.168.9.
  sed -i 's/\;date.timezone.*/date.timezone = "America\/Denver"/' /etc/php.ini | sleep 2 | cat /etc/php.ini | grep date.timezone.*=
  systemctl restart httpd
 
- #reboot
+wget -O /usr/bin/toaststat https://raw.githubusercontent.com/qmtoaster/scripts/master/toaststat.rhel8
+if [ "$?" = "0" ]; then
+   chmod 755 /usr/bin/toaststat
+   toaststat
+fi
 
