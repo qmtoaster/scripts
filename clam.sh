@@ -25,4 +25,6 @@ systemctl enable clamd@scan clamav-freshclam
 qmailctl start
 qmailctl cdb
 
+wget -O /usr/bin/toaststat.new.cos7 https://raw.githubusercontent.com/qmtoaster/scripts/master/toaststat
+
 toaststat
