@@ -25,6 +25,7 @@ systemctl start clamav-freshclam clamd@scan
 systemctl enable clamav-freshclam clamd@scan
 
 qmailctl start
+qmailctl cdb
 
 sed -i 's/CLAMS=clamav-daemon.socket//' /usr/bin/toaststat
 sed -i 's/$CLAMS//' /usr/bin/toaststat
