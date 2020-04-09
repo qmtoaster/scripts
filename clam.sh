@@ -1,5 +1,6 @@
 #!/bin/bash
 
+qmailctl stop
 systemctl stop clamav-daemon.socket clamav-daemon.service
 
 rpm -ev --nodeps clamav
@@ -40,5 +41,8 @@ systemctl start clamd@scan freshclam
 systemctl enable clamd@scan freshclam
 
 sed -i 's/CLAMD=/CLAMD=clamd@scan/' /usr/bin/toaststat
+
+qmailctl start
+qmailctl cdb
 
 toaststat
