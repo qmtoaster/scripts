@@ -8,7 +8,7 @@ rpm -ev --nodeps clamav
 yum --disablerepo=qmt-current \
     --disablerepo=qmt-testing \
     --disablerepo=qmt-devel \
-    install patch clamav clamav-update clamd -y
+    install clamav clamav-update clamd -y
     
 curl -o /etc/clamd.d/scan.conf https://raw.githubusercontent.com/qmtoaster/scripts/master/scan.conf    
 
