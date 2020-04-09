@@ -51,7 +51,7 @@ if [ "$?" != "0" ]; then
    echo "QMT Installer (qt_install.sh) did not download, download manually from (https://raw.githubusercontent.com/qmtoaster/scripts/master/)."
    echo $NORMAL
 else
-   chmod 755 qt_install.sh
+   chmod 755 qt_install_cos7.sh
    echo $GREEN
    echo "QMT Installer (qt_install_cos7.sh) is located in `pwd`, run this script after reboot to complete QMT toaster install."
    echo $NORMAL
