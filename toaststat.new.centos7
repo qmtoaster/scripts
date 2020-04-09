@@ -1,0 +1,50 @@
+#!/bin/sh
+#
+#   Script: toaststat
+# Function: This script was written to display QMT services' status.
+#
+#   Author: Eric C. Broch
+#
+#      Use: toaststat
+#
+#  Warning: This script is not bullet-proof, use at your own risk.
+#
+#  Failure: Email the qmailtoaster-list with the error
+#
+#  Updates:
+#
+TAB="$(printf '\t')"
+GREEN=$(tput setaf 2)
+RED=$(tput setaf 1)
+NORMAL=$(tput sgr0)
+
+echo $RED
+echo -n "Status of toaster services"
+echo $NORMAL
+[ -f /usr/bin/qmailctl ] && qmailctl stat
+echo ""
+
+NAMED=
+for ns in djbdns named pdns-recursor
+do
+   systemctl status $ns &> /dev/null
+   [ "$?" = "0" ] && NAMED=$ns
+done
+
+VSFTPD=
+cat /etc/vsftpd/vsftpd.conf | grep listen=NO &> /dev/null
+[ "$?" != "0" ] && VSFTPD=vsftpd
+
+SRV="systemd service"
+STAT=
+COLOR=
+IRQBALANCE=
+proc=`lscpu | grep ^CPU\(s\): | sed 's/CPU(s)://g' | tr -d '[:space:]'`
+[ $proc -gt 1 ] && IRQBALANCE=irqbalance
+# Toaster server service status
+for sv in clamd@scan clamav-freshclam spamd dovecot mariadb httpd $NAMED ntpd sshd network crond $VSFTPD acpid atd autofs smartd $IRQBALANCE
+do
+   systemctl status $sv &> /dev/null
+   [ "$?" = "0" ] && COLOR=$GREEN STAT=OK || COLOR=$RED STAT=FAILED
+   printf "%s %25.25s %s %s %s %s %s %s\n" "$SRV:" "$sv:" "${TAB}" "[" "$COLOR" "$STAT" "$NORMAL" "]"
+done
