@@ -22,8 +22,6 @@ chown -R clamscan:clamscan /var/log/clamd
 systemctl start clamd@scan clamav-freshclam
 systemctl enable clamd@scan clamav-freshclam
 
-sed -i 's/CLAMD=/CLAMD=clamd@scan/' /usr/bin/toaststat
-
 qmailctl start
 qmailctl cdb
 
