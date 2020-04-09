@@ -1,6 +1,6 @@
 #!/bin/bash
 
-systemctl stop clamav-daemon
+systemctl stop clamav-daemon.socket clamav-daemon.service
 
 rpm -ev --nodeps clamav
 
