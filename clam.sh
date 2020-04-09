@@ -1,10 +1,13 @@
 #!/bin/bash
 
-systemctl stop clamav-daemon clamav-socket
+systemctl stop clamav-daemon
 
 rpm -ev --nodeps clamav
 
-yum install patch clamav-update clamd -y
+yum --disablerepo=qmt-current \
+    --disablerepo=qmt-testing \
+    --disablerepo=qmt-devel \
+    install patch clamav clamav-update clamd -y
 
 printf '%s\n' \
 '# Run the freshclam as daemon' \
