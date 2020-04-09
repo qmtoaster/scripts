@@ -1,7 +1,7 @@
 #!/bin/bash
 
 qmailctl stop
-systemctl stop clamav-daemon clamav-socket
+systemctl stop clamav-socket clamav-daemon 
 
 rpm -ev --nodeps clamav
 
