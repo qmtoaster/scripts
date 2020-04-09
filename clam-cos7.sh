@@ -19,6 +19,7 @@ chmod 4711 /var/qmail/bin/simscan
 mkdir /var/log/clamd
 chown -R clamscan:clamscan /var/log/clamd
 
+freshclam
 systemctl start clamd@scan clamav-freshclam
 systemctl enable clamd@scan clamav-freshclam
 
