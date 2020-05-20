@@ -1,0 +1,47 @@
+# This file is opened as root, so it should be owned by root and mode 0600.
+#
+# Database driver: mysql, pgsql, sqlite
+driver = mysql
+
+# Database connection string. This is driver-specific setting.
+#
+connect = host=127.0.0.1 dbname=vpopmail user=vpopmail password=SsEeCcRrEeTt
+
+# Default password scheme.
+#
+default_pass_scheme = MD5-CRYPT
+
+# passdb query to retrieve the password. It can return fields:
+password_query = SELECT CONCAT(pw_name, '@', '%d') AS user, \
+  pw_passwd AS password, \
+  pw_dir as userdb_home, \
+  89 AS userdb_uid, \
+  89 AS userdb_gid \
+  FROM `vpopmail` \
+  WHERE pw_name = '%n' AND pw_domain = '%d'
+
+# userdb query to retrieve the user information. It can return fields:
+# (Thanks to Arturo Blanco for his hints concerning vpopmail limits)
+user_query = \
+  SELECT pw_dir AS home, \
+  89 AS uid, \
+  89 AS gid \
+  FROM vpopmail \
+  WHERE pw_name = '%n' AND pw_domain = '%d' \
+  AND ('%a'!='995' or !(pw_gid & 2)) \
+  AND ('%r'!='[WEBMAIL-IP]' or !(pw_gid & 4)) \
+  AND ('%r'='[WEBMAIL-IP]' or '%a'!='993' or !(pw_gid & 8))
+
+# [WEBMAIL-IP] is the IP of your webmail web server. 
+# I'm assuming that the imap connection is only on port 993 and the pop3 connection is on port 955.
+# Adjust to your needs
+#
+# logically this means:
+# SELECT user
+# WHEN POP is not disabled for that user connecting on port 995 (995 is the pop3s port allowed from remote in my configuration)
+# AND WHEN webmail access is not disabled for that user when connecting from [WEBMAIL-IP]
+# AND WHEN IMAP is not disabled for that user connecting on port 993 (993 is the imaps port allowed from remote 
+# in my configuration) unless his remote ip the one belonging to the webmail
+
+# Query to get a list of all usernames.
+iterate_query = SELECT CONCAT(pw_name,'@',pw_domain) AS username FROM `vpopmail`
