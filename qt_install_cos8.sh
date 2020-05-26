@@ -126,4 +126,6 @@ qmailctl stop
 qmailctl start
 qmailctl stat
 
+update-crypto-policies --set LEGACY
 
+reboot
