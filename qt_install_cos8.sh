@@ -7,8 +7,8 @@ TAB="$(printf '\t')" && GREEN=$(tput setaf 2) && RED=$(tput setaf 1) && NORMAL=$
   ports=(20 21 22 25 80 89 110 113 143 443 465 587 993 995 3306) && \
   for index in ${!ports[*]}; do echo -n "Opening port: ${ports[$index]} : ";tput setaf 2;firewall-cmd --zone=public --add-port=${ports[$index]}/tcp --permanent;tput sgr0; done && \
   firewall-cmd --zone=public --add-port=53/udp --permanent && \
-  echo -n "Reload firewall settings : " && tput setaf 2 && firewall-cmd --reload && tput sgr0 && \
-  setenforce 0 && sed -i -e 's/SELINUX=enforcing/SELINUX=disabled/' /etc/selinux/config && getenforce
+  echo -n "Reload firewall settings : " && tput setaf 2 && firewall-cmd --reload && tput sgr0
+setenforce 0 && sed -i -e 's/SELINUX=enforcing/SELINUX=disabled/' /etc/selinux/config && getenforce
 
 # Update minimal, install EPEL and REMI (roundcubemail) here, and add necessary programs.
 yum -y update && \
