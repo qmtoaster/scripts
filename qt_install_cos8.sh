@@ -83,8 +83,13 @@ ln -s /var/qmail/bin/sendmail /usr/sbin/sendmail
 
 qmailctl start && \
   systemctl start clamav-daemon.service clamav-daemon.socket clamav-freshclam dovecot spamassassin httpd chronyd acpid atd autofs smartd && \
-  systemctl enable clamav-daemon.service clamav-daemon.socket clamav-freshclam dovecot spamassassin httpd chronyd acpid atd autofs smartd && \
-  wget -O /usr/bin/toaststat http://www.qmailtoaster.org/toaststat.rhel8 && chmod 755 /usr/bin/toaststat && toaststat
+  systemctl enable clamav-daemon.service clamav-daemon.socket clamav-freshclam dovecot spamassassin httpd chronyd acpid atd autofs smartd
+
+wget -O /usr/bin/toaststat https://raw.githubusercontent.com/qmtoaster/scripts/master/toaststat.cos8
+if [ "$?" = "0" ]; then
+   chmod 755 /usr/bin/toaststat
+   toaststat
+fi
 
 # Enter domain
 read -p "Enter a domain? [Y/N] : " yesno
@@ -116,12 +121,6 @@ sed -i -e 's/Define aclnet "127.0.0.1"/Define aclnet "192.168.2.0\/24 192.168.9.
  wget -O /etc/httpd/conf.d/roundcubemail.conf http://www.qmailtoaster.org/rc.httpd.config
  sed -i 's/\;date.timezone.*/date.timezone = "America\/Denver"/' /etc/php.ini | sleep 2 | cat /etc/php.ini | grep date.timezone.*=
  systemctl restart httpd
-
-wget -O /usr/bin/toaststat https://raw.githubusercontent.com/qmtoaster/scripts/master/toaststat.cos8
-if [ "$?" = "0" ]; then
-   chmod 755 /usr/bin/toaststat
-   toaststat
-fi
 
 update-crypto-policies --set LEGACY
 
