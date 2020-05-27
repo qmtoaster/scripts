@@ -126,8 +126,9 @@ fi
 yum --enablerepo=qmt-devel update
 
 qmailctl stop
-sleep 3
+sleep 2
 qmailctl start
+sleep 2
 qmailctl stat
 
 update-crypto-policies --set LEGACY
