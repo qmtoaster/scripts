@@ -126,6 +126,7 @@ fi
 yum --enablerepo=qmt-devel update
 
 qmailctl stop
+sleep 3
 qmailctl start
 qmailctl stat
 
