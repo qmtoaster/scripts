@@ -81,6 +81,9 @@ yum -y install daemontools ucspi-tcp libsrs2 libsrs2-devel vpopmail spamdyke sim
 # Until added to qmail
 ln -s /var/qmail/bin/sendmail /usr/sbin/sendmail
 
+# Enable man pages
+echo "MANDATORY_MANPATH /var/qmail/man" >> /etc/man_db.conf
+
 qmailctl start && \
   systemctl start clamav-daemon.service clamav-daemon.socket clamav-freshclam dovecot spamassassin httpd chronyd acpid atd autofs smartd && \
   systemctl enable clamav-daemon.service clamav-daemon.socket clamav-freshclam dovecot spamassassin httpd chronyd acpid atd autofs smartd
