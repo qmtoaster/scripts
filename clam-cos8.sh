@@ -24,6 +24,8 @@ freshclam
 systemctl start clamav-freshclam clamd@scan
 systemctl enable clamav-freshclam clamd@scan
 
+chown -R clamupdate:clamupdate /var/lib/clamav
+
 qmailctl start
 qmailctl cdb
 
