@@ -19,12 +19,13 @@ chmod 0750 /var/qmail/simscan
 chmod 4711 /var/qmail/bin/simscan
 mkdir /var/log/clamd
 chown -R clamscan:clamscan /var/log/clamd
+chown -R clamupdate:clamupdate /var/log/clamav
+chown -R clamupdate:clamupdate /var/lib/clamav
+sed -i 's/#UpdateLogFile \/var\/log\/freshclam.log/UpdateLogFile \/var\/log\/clamav\/freshclam.log/g; s/#LogFileMaxSize/LogFileMaxSize/g; s/#LogTime/LogTime/g; s/#LogVerbose/LogVerbose/g; s/#LogRotate/LogRotate/g' /etc/freshclam.conf
 
 freshclam
 systemctl start clamav-freshclam clamd@scan
 systemctl enable clamav-freshclam clamd@scan
-
-chown -R clamupdate:clamupdate /var/lib/clamav
 
 qmailctl start
 qmailctl cdb
