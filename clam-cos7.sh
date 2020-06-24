@@ -16,7 +16,8 @@ chown clamscan:root /var/qmail/simscan
 chown clamscan:root /var/qmail/bin/simscan
 chmod 0750 /var/qmail/simscan
 chmod 4711 /var/qmail/bin/simscan
-mkdir /var/log/clamd
+[ ! -d /var/log/clamd ] && mkdir /var/log/clamd
+[ ! -d /var/log/clamav ] && mkdir /var/log/clamav
 chown -R clamscan:clamscan /var/log/clamd
 chown -R clamupdate:clamupdate /var/log/clamav
 chown -R clamupdate:clamupdate /var/lib/clamav
