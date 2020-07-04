@@ -23,12 +23,8 @@ chown -R clamupdate:clamupdate /var/log/clamav
 chown -R clamupdate:clamupdate /var/lib/clamav
 sed -i 's/#UpdateLogFile \/var\/log\/freshclam.log/UpdateLogFile \/var\/log\/clamav\/freshclam.log/g; s/#LogFileMaxSize/LogFileMaxSize/g; s/#LogTime/LogTime/g; s/#LogVerbose/LogVerbose/g; s/#LogRotate/LogRotate/g' /etc/freshclam.conf
 
-
 freshclam
-systemctl start clamd@scan clamav-freshclam
-systemctl enable clamd@scan clamav-freshclam
-
-
+systemctl enable --now   clamd@scan clamav-freshclam
 
 qmailctl start
 qmailctl cdb
