@@ -1,6 +1,8 @@
 
 #!/bin/bash
 
+begin=`date`
+
 # Open necessary firewall port, and disable selinux
 TAB="$(printf '\t')" && GREEN=$(tput setaf 2) && RED=$(tput setaf 1) && NORMAL=$(tput sgr0) && \
   systemctl start firewalld && systemctl enable firewalld && \
@@ -82,6 +84,7 @@ yum -y install daemontools ucspi-tcp libsrs2 libsrs2-devel vpopmail spamdyke sim
 ln -s /var/qmail/bin/sendmail /usr/sbin/sendmail
 
 # Enable man pages
+echo "Enable QMT man pages..."
 echo "MANDATORY_MANPATH /var/qmail/man" >> /etc/man_db.conf
 
 qmailctl start && \
@@ -127,4 +130,8 @@ sed -i -e 's/Define aclnet "127.0.0.1"/Define aclnet "192.168.2.0\/24 192.168.9.
 
 update-crypto-policies --set LEGACY
 
-reboot
+echo "CentOS 8 QMT installation complete"
+end=`date`
+echo "Start: $begin"
+echo "  End: $end"
+exit 0
