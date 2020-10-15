@@ -1,4 +1,3 @@
-
 #!/bin/bash
 
 begin=`date`
@@ -74,11 +73,32 @@ mysqladmin --defaults-extra-file=$credfile refresh
 echo "Done with vpopmail database..."
 
 # Add repos
-curl -o /etc/yum.repos.d/qmt.repo  https://raw.githubusercontent.com/qmtoaster/mirrorlist/master/qmt-centos8.repo && cat /etc/yum.repos.d/*.repo
+curl -o /etc/yum.repos.d/qmt.repo  https://raw.githubusercontent.com/qmtoaster/mirrorlist/master/qmt-centos8.repo
+
+read -p "Do you want many domain setup? If you're unsure press [ENTER] (Y/N): " yesno
+yesno=${yesno^^}
+if [ "$yesno" = "Y" ]
+then
+   wget -O /etc/yum.repos.d/qmt-md.repo  https://raw.githubusercontent.com/qmtoaster/mirrorlist/master/qmt-md-centos8.repo
+   yum-config-manager --enable qmt-md-testing
+fi
+
+yum --disablerepo=qmt-current \
+    --disablerepo=qmt-testing \
+    --disablerepo=qmt-devel \
+    install clamav clamav-update clamd -y
+
+sed -i 's/^#LocalSocket /LocalSocket /'  /etc/clamd.d/scan.conf
 
 # Install Qmail
-yum -y install daemontools ucspi-tcp libsrs2 libsrs2-devel vpopmail spamdyke simscan qmail autorespond control-panel ezmlm \
-  ezmlm-cgi qmailadmin qmailmrtg maildrop maildrop-devel isoqlog vqadmin squirrelmail clamav ripmime dovecot qmt-plus
+yum install daemontools ucspi-tcp libsrs2 libsrs2-devel vpopmail spamdyke simscan qmail autorespond control-panel ezmlm \
+  ezmlm-cgi qmailadmin qmailmrtg maildrop maildrop-devel isoqlog vqadmin squirrelmail ripmime dovecot qmt-plus
+
+chown clamscan:root /var/qmail/simscan
+chown clamscan:root /var/qmail/bin/simscan
+chmod 0750 /var/qmail/simscan
+chmod 4711 /var/qmail/bin/simscan
+chown -R clamupdate:clamupdate /var/lib/clamav
 
 # Until added to qmail
 ln -s /var/qmail/bin/sendmail /usr/sbin/sendmail
@@ -87,13 +107,25 @@ ln -s /var/qmail/bin/sendmail /usr/sbin/sendmail
 echo "Enable QMT man pages..."
 echo "MANDATORY_MANPATH /var/qmail/man" >> /etc/man_db.conf
 
-qmailctl start && \
-  systemctl start clamav-daemon.service clamav-daemon.socket clamav-freshclam dovecot spamassassin httpd chronyd acpid atd autofs smartd && \
-  systemctl enable clamav-daemon.service clamav-daemon.socket clamav-freshclam dovecot spamassassin httpd chronyd acpid atd autofs smartd
+printf $RED
+echo "Downloading ClamAV database..."
+printf $NORMAL
+freshclam
+printf $RED
+echo "Starting QMT..."
+printf $NORMAL
+qmailctl start
+printf $RED
+echo "Starting clamd freshclam dovecot spamassassin httpd chronyd acpid atd autofs smartd, this may take a while..."
+printf $NORMAL
+systemctl enable --now clamd@scan clamav-freshclam dovecot spamassassin httpd chronyd acpid atd autofs smartd
 
 wget -O /usr/bin/toaststat https://raw.githubusercontent.com/qmtoaster/scripts/master/toaststat.cos8
 if [ "$?" = "0" ]; then
    chmod 755 /usr/bin/toaststat
+   sed -i 's/CLAMS=clamav-daemon.socket//' /usr/bin/toaststat
+   sed -i 's/$CLAMS//' /usr/bin/toaststat
+   sed -i 's/CLAMD=clamav-daemon.service/CLAMD=clamd@scan.service/' /usr/bin/toaststat
    toaststat
 fi
 
