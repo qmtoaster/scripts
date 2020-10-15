@@ -77,7 +77,7 @@ curl -o /etc/yum.repos.d/qmt.repo  https://raw.githubusercontent.com/qmtoaster/m
 
 if [[ "$DB" == *"mysql"* ]]
 then
-   read -p "Do you want many domain setup? If you're unsure press [ENTER] (Y/N): " yesno
+   read -p "Do you want Many-Domain setup? If you're unsure press [ENTER] (Y/N): " yesno
    yesno=${yesno^^}
    if [ "$yesno" = "Y" ]
    then
