@@ -74,7 +74,7 @@ echo "Done with vpopmail database..."
 
 # Add repos
 curl -o /etc/yum.repos.d/qmt.repo  https://raw.githubusercontent.com/qmtoaster/mirrorlist/master/qmt-centos8.repo
-
+DOVECOTMYSQL=
 if [[ "$DB" == *"mysql"* ]]
 then
    read -p "Do you want Many-Domain setup? If you're unsure press [ENTER] (Y/N): " yesno
@@ -85,6 +85,7 @@ then
       yum-config-manager --enable qmt-md-testing
       wget -P /etc/yum.repos.d https://raw.githubusercontent.com/qmtoaster/scripts/master/dovecot.repo
       yum makecache
+      DOVECOTMYSQL=dovecot-mysql
    fi
 fi
 
@@ -94,7 +95,8 @@ yum -y install clamav-update
 yum -y install daemontools ucspi-tcp libsrs2 libsrs2-devel vpopmail \
                spamdyke simscan qmail autorespond control-panel ezmlm \
                ezmlm-cgi qmailadmin qmailmrtg maildrop maildrop-devel \
-               isoqlog vqadmin squirrelmail ripmime dovecot qmt-plus
+               isoqlog vqadmin squirrelmail ripmime dovecot $DOVECOTMYSQL \
+               qmt-plus
 
 sed -i 's/^#LocalSocket /LocalSocket /'  /etc/clamd.d/scan.conf
 chown -R clamupdate:clamupdate /var/lib/clamav
