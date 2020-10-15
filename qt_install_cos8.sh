@@ -83,25 +83,19 @@ then
    yum-config-manager --enable qmt-md-testing
 fi
 
-yum --disablerepo=qmt-current \
-    --disablerepo=qmt-testing \
-    --disablerepo=qmt-devel \
-    install clamav clamav-update clamd -y
-
-sed -i 's/^#LocalSocket /LocalSocket /'  /etc/clamd.d/scan.conf
+yum -y install clamav-update
 
 # Install Qmail
-yum -y install daemontools ucspi-tcp libsrs2 libsrs2-devel vpopmail spamdyke simscan qmail autorespond control-panel ezmlm \
-  ezmlm-cgi qmailadmin qmailmrtg maildrop maildrop-devel isoqlog vqadmin squirrelmail ripmime dovecot qmt-plus
+yum -y install daemontools ucspi-tcp libsrs2 libsrs2-devel vpopmail \
+               spamdyke simscan qmail autorespond control-panel ezmlm \
+               ezmlm-cgi qmailadmin qmailmrtg maildrop maildrop-devel \
+               isoqlog vqadmin squirrelmail ripmime dovecot qmt-plus
 
-chown clamscan:root /var/qmail/simscan
-chown clamscan:root /var/qmail/bin/simscan
-chmod 0750 /var/qmail/simscan
-chmod 4711 /var/qmail/bin/simscan
+sed -i 's/^#LocalSocket /LocalSocket /'  /etc/clamd.d/scan.conf
 chown -R clamupdate:clamupdate /var/lib/clamav
 
 # Until added to qmail
-ln -s /var/qmail/bin/sendmail /usr/sbin/sendmail
+[ ! -h /usr/sbin/sendmail ] && ln -s /var/qmail/bin/sendmail /usr/sbin/sendmail || echo "sendmail present..."
 
 # Enable man pages
 echo "Enable QMT man pages..."
