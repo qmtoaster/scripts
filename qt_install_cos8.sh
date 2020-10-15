@@ -91,7 +91,7 @@ yum --disablerepo=qmt-current \
 sed -i 's/^#LocalSocket /LocalSocket /'  /etc/clamd.d/scan.conf
 
 # Install Qmail
-yum install daemontools ucspi-tcp libsrs2 libsrs2-devel vpopmail spamdyke simscan qmail autorespond control-panel ezmlm \
+yum -y install daemontools ucspi-tcp libsrs2 libsrs2-devel vpopmail spamdyke simscan qmail autorespond control-panel ezmlm \
   ezmlm-cgi qmailadmin qmailmrtg maildrop maildrop-devel isoqlog vqadmin squirrelmail ripmime dovecot qmt-plus
 
 chown clamscan:root /var/qmail/simscan
