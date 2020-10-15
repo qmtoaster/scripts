@@ -112,7 +112,7 @@ qmailctl start
 printf $RED
 echo "Starting clamd freshclam dovecot spamassassin httpd chronyd acpid atd autofs smartd, this may take a while..."
 printf $NORMAL
-systemctl enable --now clamd@scan clamav-freshclam dovecot spamassassin httpd chronyd acpid atd autofs smartd
+systemctl enable --now clamd@scan clamav-freshclam dovecot spamassassin httpd chronyd acpid atd autofs smartd named
 
 wget -O /usr/bin/toaststat https://raw.githubusercontent.com/qmtoaster/scripts/master/toaststat.cos8
 if [ "$?" = "0" ]; then
