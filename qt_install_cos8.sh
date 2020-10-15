@@ -151,6 +151,9 @@ if [ "$yesno" = "Y" ] || [ "$yesno" = "y" ]; then
    fi
 fi
 
+# Connection test script, tests IMAPS, SMTPS, Submission.
+wget https://raw.githubusercontent.com/qmtoaster/scripts/master/conntest && chmod 755 conntest && ./conntest
+
 # Add access to QMT administration from desired network or hosts
 sed -i -e 's/Define aclnet "127.0.0.1"/Define aclnet "192.168.2.0\/24 192.168.9.0\/24 127.0.0.1"/' /etc/httpd/conf/toaster.conf && \
   systemctl reload httpd
