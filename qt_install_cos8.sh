@@ -98,9 +98,6 @@ yum -y install daemontools ucspi-tcp libsrs2 libsrs2-devel vpopmail \
 
 sed -i 's/^#LocalSocket /LocalSocket /'  /etc/clamd.d/scan.conf
 chown -R clamupdate:clamupdate /var/lib/clamav
-wget -P /etc/dovecot https://raw.githubusercontent.com/qmtoaster/scripts/master/dovecot.conf
-wget -P /etc/dovecot https://raw.githubusercontent.com/qmtoaster/scripts/master/dovecot-sql.conf.ext
-
 
 # Until added to qmail
 [ ! -h /usr/sbin/sendmail ] && ln -s /var/qmail/bin/sendmail /usr/sbin/sendmail || echo "sendmail present..."
