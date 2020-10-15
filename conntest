@@ -24,7 +24,7 @@ then
    exit 1
 fi
 
-#bash -c 'echo a login '"$user@$domain $pass"'; while read x; do echo "$x"; done' | openssl s_client -crlf -connect  $host:993
+#bash -c 'echo a login '"$user@$domain $pass"'; while read x; do echo "$x"; done' | openssl s_client -crlf -connect  localhost:993
 
 curl -v --insecure -I imaps://${user}%40${domain}:${pass}@$host &> ./xxx
 yyy=`cat ./xxx | grep "OK Logged in"`
