@@ -110,7 +110,7 @@ echo "Starting QMT..."
 printf $NORMAL
 qmailctl start
 printf $RED
-echo "Starting clamd freshclam dovecot spamassassin httpd chronyd acpid atd autofs smartd, this may take a while..."
+echo "Starting clamd freshclam dovecot spamassassin httpd chronyd acpid atd autofs smartd named, this may take a while..."
 printf $NORMAL
 systemctl enable --now clamd@scan clamav-freshclam dovecot spamassassin httpd chronyd acpid atd autofs smartd named
 
