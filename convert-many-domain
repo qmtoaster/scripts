@@ -1,0 +1,32 @@
+#!/bin/bash
+
+DB=vpopmail
+DBPASSWD=xxxxxx
+
+mysql -p$DBPASSWD -D $DB -e "CREATE TABLE vpopmail \
+(pw_name char(32) NOT NULL, \
+pw_domain char(96) NOT NULL, \
+pw_passwd char(40) DEFAULT NULL, \
+pw_uid int(11) DEFAULT NULL, \
+pw_gid int(11) DEFAULT NULL, \
+pw_gecos char(48) DEFAULT NULL, \
+pw_dir char(160) DEFAULT NULL, \
+pw_shell char(20) DEFAULT NULL,\
+pw_clear_passwd char(16) DEFAULT NULL, \
+PRIMARY KEY (pw_name,pw_domain)) ENGINE=InnoDB DEFAULT CHARSET=latin1"
+[ "$?" != "0" ] && echo "Error creating vpopmail table" && exit 1
+for i in `echo "show tables" | mysql -p$DBPASSWD $DB|grep -v Tables_in_`;
+do
+        if ! [ $i = dir_control ] && ! [ $i = lastauth ] && ! [ $i = vlog ] && ! [ $i = valias ] && ! [ $i = vpopmail ]; then
+                # MySQL does not allow table names with a dot (.) so vpopmail replaces the dot (.) with an underscore (_) for 
+                # domain table names, example: table whitehorsetc.com becomes whitehorsetc_com. Vpopmail utilities will not allow 
+                # one to create a domain name with an underscore even though RFC allows it. So, we can safely replace all domain 
+                # table name underscores (_) with periods or dots (.) (below, 'domain_name') in our conversion for entry into the
+                # new vpopmail many domains table.
+                domain_name=`echo $i | sed -e 's/\(.*\)_/\1./' -e 's/_/-/g'`
+                echo $domain_name;
+                mysql -p$DBPASSWD -D $DB -B --skip-column-names -e \
+                "INSERT INTO vpopmail SELECT pw_name, '$domain_name', pw_passwd, pw_uid, pw_gid, pw_gecos, pw_dir, pw_shell, pw_clear_passwd \
+                FROM $i"
+        fi
+done
