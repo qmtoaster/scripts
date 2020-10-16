@@ -1,4 +1,14 @@
-#!/bin/bash
+#!/bin/sh
+
+# This script converts the vpopmail db from a many table format--the table names
+# of the form domain_tld (domain.tld)--to one vpopmail table that is similar to 
+# the former with the addition of the tld, thus 'many domains'.
+
+# In addition to this vpopmail db conversion appropriate replacement packages
+# must be installed to interact with the converted db, CentOS 7 pkgs here, and
+# CentOS 8 pkgs here. The conversion was necessary to utilize Dovecot's dsync utility, specifically,
+# it's requirement for the command `doveadm user '*'` which fails with the 
+# vpopmail driver (replaced by sql driver) in the standard QMT installation.
 
 DB=vpopmail
 DBPASSWD=xxxxxx
