@@ -75,18 +75,16 @@ echo "Done with vpopmail database..."
 # Add repos
 curl -o /etc/yum.repos.d/qmt.repo  https://raw.githubusercontent.com/qmtoaster/mirrorlist/master/qmt-centos8.repo
 DOVECOTMYSQL=
-if [[ "$DB" == *"mysql"* ]]
+
+read -p "Do you want Many-Domain setup? If you're unsure press [ENTER] (Y/N): " yesno
+yesno=${yesno^^}
+if [ "$yesno" = "Y" ]
 then
-   read -p "Do you want Many-Domain setup? If you're unsure press [ENTER] (Y/N): " yesno
-   yesno=${yesno^^}
-   if [ "$yesno" = "Y" ]
-   then
-      wget -O /etc/yum.repos.d/qmt-md.repo  https://raw.githubusercontent.com/qmtoaster/mirrorlist/master/qmt-md-centos8.repo
-      yum-config-manager --enable qmt-md-testing
-      wget -P /etc/yum.repos.d https://raw.githubusercontent.com/qmtoaster/scripts/master/dovecot.repo
-      yum makecache
-      DOVECOTMYSQL=dovecot-mysql
-   fi
+   wget -O /etc/yum.repos.d/qmt-md.repo  https://raw.githubusercontent.com/qmtoaster/mirrorlist/master/qmt-md-centos8.repo
+   yum-config-manager --enable qmt-md-testing
+   wget -P /etc/yum.repos.d https://raw.githubusercontent.com/qmtoaster/scripts/master/dovecot.repo
+   yum makecache
+   DOVECOTMYSQL=dovecot-mysql
 fi
 
 yum -y install clamav-update
