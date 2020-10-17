@@ -96,7 +96,7 @@ yum -y install daemontools ucspi-tcp libsrs2 libsrs2-devel vpopmail \
                spamdyke simscan qmail autorespond control-panel ezmlm \
                ezmlm-cgi qmailadmin qmailmrtg maildrop maildrop-devel \
                isoqlog vqadmin squirrelmail ripmime dovecot $DOVECOTMYSQL \
-               qmt-plus
+               qmt-plus clamd
 
 sed -i 's/^#LocalSocket /LocalSocket /'  /etc/clamd.d/scan.conf
 chown -R clamupdate:clamupdate /var/lib/clamav
