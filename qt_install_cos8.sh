@@ -51,7 +51,7 @@ fi
 echo -e "\n"
 MYSQLPW=$password
 credfile=~/sql.cnf
-echo -e "[client]\nuser=root\npassword=$MYSQLPW\nhost=localhost" > $credfile
+echo -e "[client]\nuser=root\npassword='$MYSQLPW'\nhost=localhost" > $credfile
 echo "Starting $DBD Server..."
 systemctl start $DBD && systemctl enable $DBD && systemctl status $DBD
 echo "Started $DBD Server"
