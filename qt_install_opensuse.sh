@@ -86,7 +86,42 @@ if [ "$?" = "0" ]; then
    toaststat
 fi
 
-#**** More to do here ****
+# Enter domain
+read -p "Enter a domain? [Y/N] : " yesno
+if [ "$yesno" = "Y" ] || [ "$yesno" = "y" ]; then
+   /home/vpopmail/bin/vadddomain
+   read -p "Enter domain: " newdom
+   read -s -p "Enter postmaster@$newdom password: " newpass
+   echo ""
+   if [ -z "$newdom" ] || [ -z "$newpass" ]; then
+      echo "Empty username or password."
+   else
+      /home/vpopmail/bin/vadddomain $newdom $newpass
+      sh /usr/share/toaster/isoqlog/bin/cron.sh
+   fi
+fi
+
+# Connection test script, tests IMAPS, SMTPS, Submission.
+wget https://raw.githubusercontent.com/qmtoaster/scripts/master/conntest && chmod 755 conntest && ./conntest
+
+# Add access to QMT administration from desired network or hosts
+sed -i -e 's/Define aclnet "127.0.0.1"/Define aclnet "192.168.2.0\/24 192.168.9.0\/24 127.0.0.1"/' /etc/httpd/conf/toaster.conf && \
+  systemctl reload httpd
+
+# Add roundcube support
+ echo "Adding roundcubemail support..."
+ mysql --defaults-extra-file=$credfile -e "create database roundcube character set utf8 collate utf8_bin"
+ mysql --defaults-extra-file=$credfile -e "CREATE USER roundcube@localhost IDENTIFIED BY 'p4ssw3rd'"
+ mysql --defaults-extra-file=$credfile -e "GRANT ALL PRIVILEGES ON roundcube.* TO roundcube@localhost"
+ mysql --defaults-extra-file=$credfile roundcube < /usr/share/roundcubemail/SQL/mysql.initial.sql
+ cp -p /etc/httpd/conf.d/roundcubemail.conf /etc/httpd/conf.d/roundcubemail.conf.bak && \
+ wget -O /etc/roundcubemail/config.inc.php http://www.qmailtoaster.org/rc.default.config && \
+ wget -O /etc/httpd/conf.d/roundcubemail.conf http://www.qmailtoaster.org/rc.httpd.config
+ sed -i 's/\;date.timezone.*/date.timezone = "America\/Denver"/' /etc/php7/apache2/php.ini | sleep 2 | cat /etc/php7/apache2/php.ini | grep date.timezone.*=
+ systemctl restart httpd
+
+update-crypto-policies --set LEGACY
+
 
 echo "OpenSUSE Leap QMT installation complete"
 end=`date`
