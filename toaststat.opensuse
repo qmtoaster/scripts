@@ -1,0 +1,39 @@
+#!/bin/sh
+#
+#   Script: toaststat
+# Function: This script was written to display QMT services' status.
+#
+#   Author: Eric C. Broch
+#
+#      Use: toaststat
+#
+#  Warning: This script is not bullet-proof, use at your own risk.
+#
+#  Failure: Email the qmailtoaster-list with the error
+#
+#  Updates:
+#
+TAB="$(printf '\t')"
+GREEN=$(tput setaf 2)
+RED=$(tput setaf 1)
+NORMAL=$(tput sgr0)
+
+echo $RED
+echo -n "Status of toaster services"
+echo $NORMAL
+[ -f /usr/bin/qmailctl ] && qmailctl stat
+echo ""
+
+SRV="systemd service"
+STAT=
+COLOR=
+IRQBALANCE=
+proc=`lscpu | grep ^CPU\(s\): | sed 's/CPU(s)://g' | tr -d '[:space:]'`
+[ $proc -gt 1 ] && IRQBALANCE=irqbalance
+# Toaster server service status
+for sv in clamd spamd dovecot mariadb apache2 named chronyd sshd cron vsftpd acpid atd autofs smartd $IRQBALANCE
+do
+   systemctl status $sv &> /dev/null
+   [ "$?" = "0" ] && COLOR=$GREEN STAT=OK || COLOR=$RED STAT=FAILED
+   printf "%s %25.25s %s %s %s %s %s %s\n" "$SRV:" "$sv:" "${TAB}" "[" "$COLOR" "$STAT" "$NORMAL" "]"
+done
