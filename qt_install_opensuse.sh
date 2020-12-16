@@ -116,8 +116,8 @@ sed -i -e 's/Define aclnet "127.0.0.1"/Define aclnet "192.168.2.0\/24 192.168.9.
  mysql --defaults-extra-file=$credfile -e "GRANT ALL PRIVILEGES ON roundcube.* TO roundcube@localhost"
  mysql --defaults-extra-file=$credfile roundcube < /usr/share/doc/packages/roundcubemail/SQL/mysql.initial.sql
  wget -O /etc/roundcubemail/config.inc.php http://www.qmailtoaster.org/rc.default.config
- sed -i 's/\;date.timezone.*/date.timezone = "America\/Denver"/' /etc/php7/apache2/php.ini | sleep 2 | cat /etc/php7/apache2/php.ini | grep date.timezone.*=
- systemctl restart apache
+ sed -i 's/^date.timezone.*/date.timezone = "America\/Denver"/' /etc/php7/apache2/php.ini
+ systemctl restart apache2
 
 update-crypto-policies --set LEGACY
 
