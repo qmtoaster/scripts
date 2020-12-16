@@ -114,11 +114,9 @@ sed -i -e 's/Define aclnet "127.0.0.1"/Define aclnet "192.168.2.0\/24 192.168.9.
  mysql --defaults-extra-file=$credfile -e "CREATE USER roundcube@localhost IDENTIFIED BY 'p4ssw3rd'"
  mysql --defaults-extra-file=$credfile -e "GRANT ALL PRIVILEGES ON roundcube.* TO roundcube@localhost"
  mysql --defaults-extra-file=$credfile roundcube < /usr/share/roundcubemail/SQL/mysql.initial.sql
- cp -p /etc/httpd/conf.d/roundcubemail.conf /etc/httpd/conf.d/roundcubemail.conf.bak && \
- wget -O /etc/roundcubemail/config.inc.php http://www.qmailtoaster.org/rc.default.config && \
- wget -O /etc/httpd/conf.d/roundcubemail.conf http://www.qmailtoaster.org/rc.httpd.config
+ wget -O /etc/roundcubemail/config.inc.php http://www.qmailtoaster.org/rc.default.config
  sed -i 's/\;date.timezone.*/date.timezone = "America\/Denver"/' /etc/php7/apache2/php.ini | sleep 2 | cat /etc/php7/apache2/php.ini | grep date.timezone.*=
- systemctl restart httpd
+ systemctl restart apache
 
 update-crypto-policies --set LEGACY
 
