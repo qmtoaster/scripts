@@ -118,6 +118,19 @@ sed -i -e 's/Define aclnet "127.0.0.1"/Define aclnet "192.168.2.0\/24 192.168.9.
  wget -O /etc/roundcubemail/config.inc.php http://www.qmailtoaster.org/rc.default.config
  sed -i 's/^date.timezone.*/date.timezone = "America\/Denver"/' /etc/php7/apache2/php.ini
  systemctl restart apache2
+ 
+ # Allow Dovecot access to mail db
+ systemctl stop apparmor
+ systemctl disable apparmor
+ printf $RED
+ echo "Apparmor has been disabled. If you cannot connect to the Dovecot IMAP you may need to reboot."
+ 
+ # All squirrelamail access to user preferences file and directories
+ chown wwwrun:www /var/lib/squirrelmail/prefs
+ chmod 755 /var/lib/squirrelmail/prefs
+ mkdir /usr/share/squirrelmail/data 
+ mv /var/lib/squirrelmail/prefs/default_pref /usr/share/squirrelmail/data
+ chmod 644 /usr/share/squirrelmail/data/default_pref
 
 update-crypto-policies --set LEGACY
 
