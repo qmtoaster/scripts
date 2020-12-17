@@ -123,7 +123,7 @@ sed -i -e 's/Define aclnet "127.0.0.1"/Define aclnet "192.168.2.0\/24 192.168.9.
  systemctl stop apparmor
  systemctl disable apparmor
  printf $RED
- echo "Apparmor has been disabled. If you cannot connect to the Dovecot IMAP you may need to reboot."
+ echo "Apparmor has been disabled. If connection to the Dovecot IMAP server fails, reboot."
  
  # All squirrelamail access to user preferences file and directories
  chown wwwrun:www /var/lib/squirrelmail/prefs
