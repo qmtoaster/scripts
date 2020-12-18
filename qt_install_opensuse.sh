@@ -129,8 +129,7 @@ sed -i -e 's/Define aclnet "127.0.0.1"/Define aclnet "192.168.2.0\/24 192.168.9.
  #mv /var/lib/squirrelmail/prefs/default_pref /usr/share/squirrelmail/data
  #chmod 644 /usr/share/squirrelmail/data/default_pref
 
-update-crypto-policies --set LEGACY
-
+#update-crypto-policies --set LEGACY
 
 echo "OpenSUSE Leap QMT installation complete"
 end=`date`
