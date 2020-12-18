@@ -12,7 +12,7 @@ TAB="$(printf '\t')" && GREEN=$(tput setaf 2) && RED=$(tput setaf 1) && NORMAL=$
 
 zypper update -y
 zypper install -y logwatch bind bind-utils telnet yum-utils chrony acpid at autofs bzip2 \
-       smartmontools wget vsftpd fail2ban roundcubemail php-mysql
+       smartmontools wget vsftpd fail2ban roundcubemail php-mysql net-tools-deprecated
 
 # MySQL admin password
 read -s -p "Enter $DBD password: " password
