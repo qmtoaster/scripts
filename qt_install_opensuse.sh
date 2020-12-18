@@ -131,6 +131,10 @@ sed -i -e 's/Define aclnet "127.0.0.1"/Define aclnet "192.168.2.0\/24 192.168.9.
 
 #update-crypto-policies --set LEGACY
 
+# Left to do OpenSUSE
+# 1) Find a way to set cryptograhic policies to legacy on OpenSUSE
+# 2) Web SSL is not working, Fix
+
 echo "OpenSUSE Leap QMT installation complete"
 end=`date`
 echo "Start: $begin"
