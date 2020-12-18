@@ -51,11 +51,9 @@ zypper --no-gpg-checks install -y simscan clamav  daemontools ucspi-tcp \
                maildrop-devel isoqlog vqadmin squirrelmail ripmime dovecot \
                spamassassin
 
-[ -f /etc/dovecot/dovecot.conf ] && mv /etc/dovecot/dovecot.conf /etc/dovecot/dovecot.conf.bak
-[ -f /etc/dovecot/dovecot-sql.conf.ext ] && mv /etc/dovecot/dovecot-sql.conf.ext /etc/dovecot/dovecot-sql.conf.ext.bak
-wget -P /etc/dovecot https://raw.githubusercontent.com/qmtoaster/scripts/master/dovecot.conf
+mv /etc/dovecot/dovecot-sql.conf.ext /etc/dovecot/dovecot-sql.conf.ext.bak &> /dev/null
+wget -P /etc/dovecot https://raw.githubusercontent.com/qmtoaster/scripts/master/local.conf
 wget -P /etc/dovecot https://raw.githubusercontent.com/qmtoaster/scripts/master/dovecot-sql.conf.ext
-sed -i 's/log_path/#log_path/' /etc/dovecot/dovecot.conf
 systemctl relaod dovecot &> /dev/null
 
 # Enable man pages
@@ -66,7 +64,6 @@ cp /var/qmail/control/servercert.pem /etc/ssl/private
 sed -i 's/smartd_opts=""/smartd_opts="-q never"/' /var/lib/smartmontools/smartd_opts
 sed -i 's/ConditionVirtualization=false/#ConditionVirtualization=false/' /usr/lib/systemd/system/smartd.service
 sed -i 's/DirectoryIndex/DirectoryIndex index.php/' /etc/apache2/httpd.conf
-
 
 printf $RED
 echo "Downloading ClamAV database..."
