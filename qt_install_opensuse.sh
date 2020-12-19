@@ -122,6 +122,7 @@ sed -i 's/ConditionVirtualization=false/#ConditionVirtualization=false/' /usr/li
 sed -i 's/DirectoryIndex/DirectoryIndex index.php/' /etc/apache2/httpd.conf
 
 # Add access to QMT administration from desired network or hosts && enable OpenSUSE SSL
+sed -i 's|Alias /roundcubemail|Alias /email|' /etc/apache2/conf.d/roundcubemail.conf
 sed -i 's|APACHE_SERVER_FLAGS=""|APACHE_SERVER_FLAGS="SSL"|' /etc/sysconfig/apache2
 sed -i 's|APACHE_MODULES="|APACHE_MODULES="mod_php7 |' /etc/sysconfig/apache2
 sed -i 's|SSLCertificateFile.*|SSLCertificateFile /var/qmail/control/servercert.pem|g' /etc/apache2/vhosts.d/vhost-ssl.template
