@@ -82,6 +82,9 @@ printf $RED
 echo "Created Roundcube DB..."
 printf $NORMAL
 
+# Remvoe postfix
+zypper remove postfix
+
 # Get QMT/OpenSUSE repo
 printf $RED
 echo "Install Mail Server..."
