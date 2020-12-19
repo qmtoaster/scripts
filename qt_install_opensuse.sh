@@ -106,8 +106,11 @@ fi
 wget https://raw.githubusercontent.com/qmtoaster/scripts/master/conntest && chmod 755 conntest && ./conntest
 
 # Add access to QMT administration from desired network or hosts
-sed -i -e 's/Define aclnet "127.0.0.1"/Define aclnet "192.168.2.0\/24 192.168.9.0\/24 127.0.0.1"/' /etc/httpd/conf/toaster.conf && \
-  systemctl reload httpd
+sed -i -e 's/Define aclnet "127.0.0.1"/Define aclnet "192.168.2.0\/24 192.168.9.0\/24 127.0.0.1"/' /etc/httpd/conf/toaster.conf
+sed -i 's|SSLCertificateFile.*|SSLCertificateFile /var/qmail/control/servercert.pem|g' /etc/apache2/vhosts.d/vhost-ssl.template
+sed -i 's|SSLCertificateKeyFile.*|SSLCertificateKeyFile /var/qmail/control/servercert.pem|g' /etc/apache2/vhosts.d/vhost-ssl.template
+mv /etc/apache2/vhosts.d/vhost-ssl.template /etc/apache2/vhosts.d/vhost-ssl.conf
+systemctl restart httpd
 
 # Add roundcube support
  echo "Adding roundcubemail support..."
