@@ -91,7 +91,7 @@ echo "Install Mail Server..."
 printf $NORMAL
 curl -o  /etc/zypp/repos.d/qmt.repo  https://raw.githubusercontent.com/qmtoaster/mirrorlist/master/qmt-opensuse152.repo
 printf $GREEN
-read -p "For Mail server installation uninstall libmilter and break clamav and simscan, this won't hurt the installation...<CR>" input
+read -p "For Mail server installation uninstall libmilter and break clamav and simscan, this won't hurt the installation...<CR> : " input
 printf $NORMAL
 zypper install simscan clamav daemontools ucspi-tcp libsrs2 libsrs2-devel \
                   vpopmail spamdyke qmail autorespond control-panel ezmlm \
