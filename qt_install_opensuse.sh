@@ -17,7 +17,7 @@ printf $NORMAL
 systemctl stop apparmor &> /dev/null
 systemctl disable apparmor &> /dev/null
 printf $RED
-echo "Apparmor has been disabled. If connection to the Dovecot IMAP server fails, reboot."
+echo "Apparmor has been disabled. If connection to the Dovecot IMAP server fails, reboot is necessary."
 printf $NORMAL
 
 printf $RED
