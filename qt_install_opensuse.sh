@@ -162,11 +162,9 @@ wget https://raw.githubusercontent.com/qmtoaster/scripts/master/conntest && chmo
 # mv /var/lib/squirrelmail/prefs/default_pref /usr/share/squirrelmail/data
 # chmod 644 /usr/share/squirrelmail/data/default_pref
 
-#update-crypto-policies --set LEGACY
-
 # Left to do OpenSUSE
 # 1) Find a way to set cryptograhic policies to legacy on OpenSUSE
-# 2) Web SSL is not working, Fix
+#update-crypto-policies --set LEGACY
 
 echo "OpenSUSE Leap QMT installation complete"
 end=`date`
