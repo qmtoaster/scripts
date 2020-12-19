@@ -44,6 +44,9 @@ mysqladmin --defaults-extra-file=$credfile reload
 mysqladmin --defaults-extra-file=$credfile refresh
 echo "Done with vpopmail database..."
 
+# Get QMT/OpenSUSE repo
+curl -o  /etc/zypp/repos.d/qmt.repo  https://raw.githubusercontent.com/qmtoaster/mirrorlist/master/qmt-opensuse152.repo
+
 # Install mail server
 zypper --no-gpg-checks install -y simscan clamav  daemontools ucspi-tcp \
                libsrs2 libsrs2-devel vpopmail spamdyke qmail autorespond \
