@@ -48,11 +48,11 @@ echo "Done with vpopmail database..."
 curl -o  /etc/zypp/repos.d/qmt.repo  https://raw.githubusercontent.com/qmtoaster/mirrorlist/master/qmt-opensuse152.repo
 
 # Install mail server
-zypper --no-gpg-checks install -y simscan clamav  daemontools ucspi-tcp \
-               libsrs2 libsrs2-devel vpopmail spamdyke qmail autorespond \
-               control-panel ezmlm ezmlm-cgi qmailadmin qmailmrtg maildrop \
-               maildrop-devel isoqlog vqadmin squirrelmail ripmime dovecot \
-               spamassassin
+zypper install -y simscan clamav daemontools ucspi-tcp libsrs2 libsrs2-devel \
+                  vpopmail spamdyke qmail autorespond control-panel ezmlm \
+                  ezmlm-cgi qmailadmin qmailmrtg maildrop maildrop-devel \
+                  isoqlog vqadmin squirrelmail ripmime dovecot spamassassin
+               
 
 mv /etc/dovecot/dovecot-sql.conf.ext /etc/dovecot/dovecot-sql.conf.ext.bak &> /dev/null
 wget -P /etc/dovecot https://raw.githubusercontent.com/qmtoaster/scripts/master/local.conf
