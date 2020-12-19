@@ -2,13 +2,20 @@
 
 begin=`date`
 
-# Open necessary firewall port, and disable selinux
+# Open necessary firewall ports
 TAB="$(printf '\t')" && GREEN=$(tput setaf 2) && RED=$(tput setaf 1) && NORMAL=$(tput sgr0) && \
   systemctl start firewalld && systemctl enable firewalld && \
   ports=(20 21 22 25 80 89 110 113 143 443 465 587 993 995 3306) && \
   for index in ${!ports[*]}; do echo -n "Opening port: ${ports[$index]} : ";tput setaf 2;firewall-cmd --zone=public --add-port=${ports[$index]}/tcp --permanent;tput sgr0; done && \
   firewall-cmd --zone=public --add-port=53/udp --permanent && \
   echo -n "Reload firewall settings : " && tput setaf 2 && firewall-cmd --reload && tput sgr0
+  
+ # Allow Dovecot access to mail db
+ systemctl stop apparmor
+ systemctl disable apparmor
+ printf $RED
+ echo "Apparmor has been disabled. If connection to the Dovecot IMAP server fails, reboot."
+ printf $NORMAL
 
 zypper update -y
 zypper install -y logwatch bind bind-utils telnet yum-utils chrony acpid at autofs bzip2 \
@@ -21,6 +28,7 @@ if [ -z "$password" ]; then
    echo "Empty password, exiting..."
    exit 1
 fi
+
 echo -e "\n"
 MYSQLPW=$password
 credfile=~/sql.cnf
@@ -120,12 +128,6 @@ fi
 # Connection test script, tests IMAPS, SMTPS, Submission.
 wget https://raw.githubusercontent.com/qmtoaster/scripts/master/conntest && chmod 755 conntest && ./conntest
 
- # Allow Dovecot access to mail db
- systemctl stop apparmor
- systemctl disable apparmor
- printf $RED
- echo "Apparmor has been disabled. If connection to the Dovecot IMAP server fails, reboot."
- 
 # All squirrelamail access to user preferences file and directories
 # chown wwwrun:www /var/lib/squirrelmail/prefs
 # chmod 755 /var/lib/squirrelmail/prefs
