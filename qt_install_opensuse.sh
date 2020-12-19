@@ -91,10 +91,10 @@ echo "Install Mail Server..."
 printf $NORMAL
 curl -o  /etc/zypp/repos.d/qmt.repo  https://raw.githubusercontent.com/qmtoaster/mirrorlist/master/qmt-opensuse152.repo
 printf $GREEN
-ClamAV requires libmilter1 (There is no provider). Below are the forthcoming prompts, they will not break your installation.
-Solution 3: break clamav...
-Solution 2: break simscan...
-Continue to prompts <CR> :
+echo "ClamAV requires libmilter1 (There is no provider). Below are the forthcoming prompts, they will not break your installation."
+echo "Solution 3: break clamav..."
+echo "Solution 2: break simscan..."
+read -p "Continue to prompts <CR> : " input
 printf $NORMAL
 zypper install simscan clamav daemontools ucspi-tcp libsrs2 libsrs2-devel \
                   vpopmail spamdyke qmail autorespond control-panel ezmlm \
