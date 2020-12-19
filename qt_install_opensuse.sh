@@ -113,7 +113,6 @@ sed -i 's/ConditionVirtualization=false/#ConditionVirtualization=false/' /usr/li
 sed -i 's/DirectoryIndex/DirectoryIndex index.php/' /etc/apache2/httpd.conf
 
 # Add access to QMT administration from desired network or hosts && enable OpenSUSE SSL
-sed -i -e 's/Define aclnet "127.0.0.1"/Define aclnet "192.168.2.0\/24 192.168.9.0\/24 127.0.0.1"/' /etc/httpd/conf/toaster.conf
 sed -i 's|SSLCertificateFile.*|SSLCertificateFile /var/qmail/control/servercert.pem|g' /etc/apache2/vhosts.d/vhost-ssl.template
 sed -i 's|SSLCertificateKeyFile.*|SSLCertificateKeyFile /var/qmail/control/servercert.pem|g' /etc/apache2/vhosts.d/vhost-ssl.template
 mv /etc/apache2/vhosts.d/vhost-ssl.template /etc/apache2/vhosts.d/vhost-ssl.conf
