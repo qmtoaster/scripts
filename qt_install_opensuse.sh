@@ -91,7 +91,9 @@ echo "Install Mail Server..."
 printf $NORMAL
 curl -o  /etc/zypp/repos.d/qmt.repo  https://raw.githubusercontent.com/qmtoaster/mirrorlist/master/qmt-opensuse152.repo
 printf $GREEN
-echo "ClamAV requires libmilter1 (There is no provider). Below are the forthcoming prompts, they will not break your installation."
+echo "ClamAV requires libmilter1 (There is no provider)."
+echo "Below are the forthcoming prompts. Choose (3) then (2)."
+echo "This will not break the installation."
 echo "Solution 3: break clamav..."
 echo "Solution 2: break simscan..."
 read -p "Continue to prompts <CR> : " input
@@ -122,6 +124,7 @@ sed -i 's/ConditionVirtualization=false/#ConditionVirtualization=false/' /usr/li
 sed -i 's/DirectoryIndex/DirectoryIndex index.php/' /etc/apache2/httpd.conf
 
 # Add access to QMT administration from desired network or hosts && enable OpenSUSE SSL
+echo "Hello World..." > /srv/www/htdocs/index.html
 sed -i 's|Alias /roundcubemail|Alias /email|' /etc/apache2/conf.d/roundcubemail.conf
 sed -i 's|APACHE_SERVER_FLAGS=""|APACHE_SERVER_FLAGS="SSL"|' /etc/sysconfig/apache2
 sed -i 's|APACHE_MODULES="|APACHE_MODULES="mod_php7 |' /etc/sysconfig/apache2
