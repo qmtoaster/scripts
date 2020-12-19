@@ -45,6 +45,15 @@ mysqladmin --defaults-extra-file=$credfile reload
 mysqladmin --defaults-extra-file=$credfile refresh
 echo "Done with vpopmail database..."
 
+# Add roundcube support
+ echo "Adding roundcubemail support..."
+ mysql --defaults-extra-file=$credfile -e "create database roundcube character set utf8 collate utf8_bin"
+ mysql --defaults-extra-file=$credfile -e "CREATE USER roundcube@localhost IDENTIFIED BY 'p4ssw3rd'"
+ mysql --defaults-extra-file=$credfile -e "GRANT ALL PRIVILEGES ON roundcube.* TO roundcube@localhost"
+ mysql --defaults-extra-file=$credfile roundcube < /usr/share/doc/packages/roundcubemail/SQL/mysql.initial.sql
+ wget -O /etc/roundcubemail/config.inc.php http://www.qmailtoaster.org/rc.default.config
+ sed -i 's/^date.timezone.*/date.timezone = "America\/Denver"/' /etc/php7/apache2/php.ini
+
 # Get QMT/OpenSUSE repo
 curl -o  /etc/zypp/repos.d/qmt.repo  https://raw.githubusercontent.com/qmtoaster/mirrorlist/master/qmt-opensuse152.repo
 
@@ -68,6 +77,12 @@ sed -i 's/smartd_opts=""/smartd_opts="-q never"/' /var/lib/smartmontools/smartd_
 sed -i 's/ConditionVirtualization=false/#ConditionVirtualization=false/' /usr/lib/systemd/system/smartd.service
 sed -i 's/DirectoryIndex/DirectoryIndex index.php/' /etc/apache2/httpd.conf
 
+# Add access to QMT administration from desired network or hosts && enable OpenSUSE SSL
+sed -i -e 's/Define aclnet "127.0.0.1"/Define aclnet "192.168.2.0\/24 192.168.9.0\/24 127.0.0.1"/' /etc/httpd/conf/toaster.conf
+sed -i 's|SSLCertificateFile.*|SSLCertificateFile /var/qmail/control/servercert.pem|g' /etc/apache2/vhosts.d/vhost-ssl.template
+sed -i 's|SSLCertificateKeyFile.*|SSLCertificateKeyFile /var/qmail/control/servercert.pem|g' /etc/apache2/vhosts.d/vhost-ssl.template
+mv /etc/apache2/vhosts.d/vhost-ssl.template /etc/apache2/vhosts.d/vhost-ssl.conf
+ 
 printf $RED
 echo "Downloading ClamAV database..."
 printf $NORMAL
@@ -105,22 +120,6 @@ fi
 # Connection test script, tests IMAPS, SMTPS, Submission.
 wget https://raw.githubusercontent.com/qmtoaster/scripts/master/conntest && chmod 755 conntest && ./conntest
 
-# Add access to QMT administration from desired network or hosts && enable OpenSUSE SSL
-sed -i -e 's/Define aclnet "127.0.0.1"/Define aclnet "192.168.2.0\/24 192.168.9.0\/24 127.0.0.1"/' /etc/httpd/conf/toaster.conf
-sed -i 's|SSLCertificateFile.*|SSLCertificateFile /var/qmail/control/servercert.pem|g' /etc/apache2/vhosts.d/vhost-ssl.template
-sed -i 's|SSLCertificateKeyFile.*|SSLCertificateKeyFile /var/qmail/control/servercert.pem|g' /etc/apache2/vhosts.d/vhost-ssl.template
-mv /etc/apache2/vhosts.d/vhost-ssl.template /etc/apache2/vhosts.d/vhost-ssl.conf
-
-# Add roundcube support
- echo "Adding roundcubemail support..."
- mysql --defaults-extra-file=$credfile -e "create database roundcube character set utf8 collate utf8_bin"
- mysql --defaults-extra-file=$credfile -e "CREATE USER roundcube@localhost IDENTIFIED BY 'p4ssw3rd'"
- mysql --defaults-extra-file=$credfile -e "GRANT ALL PRIVILEGES ON roundcube.* TO roundcube@localhost"
- mysql --defaults-extra-file=$credfile roundcube < /usr/share/doc/packages/roundcubemail/SQL/mysql.initial.sql
- wget -O /etc/roundcubemail/config.inc.php http://www.qmailtoaster.org/rc.default.config
- sed -i 's/^date.timezone.*/date.timezone = "America\/Denver"/' /etc/php7/apache2/php.ini
- systemctl restart apache2
- 
  # Allow Dovecot access to mail db
  systemctl stop apparmor
  systemctl disable apparmor
