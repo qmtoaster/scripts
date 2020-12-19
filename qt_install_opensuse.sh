@@ -22,13 +22,15 @@ zypper install -y logwatch bind bind-utils telnet yum-utils chrony acpid at auto
        smartmontools wget vsftpd fail2ban roundcubemail php-mysql net-tools-deprecated \
        mariadb
 
-# MariaDB admin password
+# Set up MariaDB Server
+printf $RED
+echo "MariaDB setup started..."
+printf $NORMAL
 read -s -p "Enter MariaDB Server password: " password
 if [ -z "$password" ]; then
    echo "Empty password, exiting..."
    exit 1
 fi
-
 echo -e "\n"
 MYSQLPW=$password
 credfile=~/sql.cnf
@@ -39,8 +41,14 @@ echo "Started MariaDB Server"
 sleep 2
 echo "Setting MariaDB admin password..."
 mysqladmin -uroot password $MYSQLPW &> /dev/null
-echo "Admin password set"
-echo "Creating vpopmail database..."
+printf $RED
+echo "MariaDB setup completed..."
+printf $NORMAL
+
+
+printf $RED
+echo "Create Vpopmail DB..."
+printf $NORMAL
 mysqladmin --defaults-extra-file=$credfile reload
 mysqladmin --defaults-extra-file=$credfile refresh
 mysqladmin --defaults-extra-file=$credfile create vpopmail
@@ -51,16 +59,20 @@ mysql --defaults-extra-file=$credfile -e "CREATE USER vpopmail@localhost IDENTIF
 mysql --defaults-extra-file=$credfile -e "GRANT ALL PRIVILEGES ON vpopmail.* TO vpopmail@localhost"
 mysqladmin --defaults-extra-file=$credfile reload
 mysqladmin --defaults-extra-file=$credfile refresh
+printf $RED
 echo "Done with vpopmail database..."
+printf $NORMAL
 
 # Add roundcube support
- echo "Adding roundcubemail support..."
- mysql --defaults-extra-file=$credfile -e "create database roundcube character set utf8 collate utf8_bin"
- mysql --defaults-extra-file=$credfile -e "CREATE USER roundcube@localhost IDENTIFIED BY 'p4ssw3rd'"
- mysql --defaults-extra-file=$credfile -e "GRANT ALL PRIVILEGES ON roundcube.* TO roundcube@localhost"
- mysql --defaults-extra-file=$credfile roundcube < /usr/share/doc/packages/roundcubemail/SQL/mysql.initial.sql
- wget -O /etc/roundcubemail/config.inc.php http://www.qmailtoaster.org/rc.default.config
- sed -i 's/^date.timezone.*/date.timezone = "America\/Denver"/' /etc/php7/apache2/php.ini
+printf $RED
+echo "Adding roundcubemail support..."
+printf $NORMAL
+mysql --defaults-extra-file=$credfile -e "create database roundcube character set utf8 collate utf8_bin"
+mysql --defaults-extra-file=$credfile -e "CREATE USER roundcube@localhost IDENTIFIED BY 'p4ssw3rd'"
+mysql --defaults-extra-file=$credfile -e "GRANT ALL PRIVILEGES ON roundcube.* TO roundcube@localhost"
+mysql --defaults-extra-file=$credfile roundcube < /usr/share/doc/packages/roundcubemail/SQL/mysql.initial.sql
+wget -O /etc/roundcubemail/config.inc.php http://www.qmailtoaster.org/rc.default.config
+sed -i 's/^date.timezone.*/date.timezone = "America\/Denver"/' /etc/php7/apache2/php.ini
 
 # Get QMT/OpenSUSE repo
 curl -o  /etc/zypp/repos.d/qmt.repo  https://raw.githubusercontent.com/qmtoaster/mirrorlist/master/qmt-opensuse152.repo
