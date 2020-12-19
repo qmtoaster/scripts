@@ -15,7 +15,7 @@ zypper install -y logwatch bind bind-utils telnet yum-utils chrony acpid at auto
        smartmontools wget vsftpd fail2ban roundcubemail php-mysql net-tools-deprecated \
        mariadb mariadb-server
 
-# MySQL admin password
+# MariaDB admin password
 read -s -p "Enter MariaDB Server password: " password
 if [ -z "$password" ]; then
    echo "Empty password, exiting..."
