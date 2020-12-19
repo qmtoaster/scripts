@@ -63,7 +63,6 @@ systemctl relaod dovecot &> /dev/null
 # Enable man pages
 echo "Enable QMT man pages..."
 echo "MANDATORY_MANPATH /var/qmail/man" >> /etc/manpath.config
-cp /var/qmail/control/servercert.pem /etc/ssl/private
 
 sed -i 's/smartd_opts=""/smartd_opts="-q never"/' /var/lib/smartmontools/smartd_opts
 sed -i 's/ConditionVirtualization=false/#ConditionVirtualization=false/' /usr/lib/systemd/system/smartd.service
