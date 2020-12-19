@@ -10,7 +10,7 @@ TAB="$(printf '\t')" && GREEN=$(tput setaf 2) && RED=$(tput setaf 1) && NORMAL=$
   firewall-cmd --zone=public --add-port=53/udp --permanent && \
   echo -n "Reload firewall settings : " && tput setaf 2 && firewall-cmd --reload && tput sgr0
   
- # Allow Dovecot access to mail db
+# Disable Apparmor
 printf $RED
 echo "Disabling Apparmor..."
 printf $NORMAL
