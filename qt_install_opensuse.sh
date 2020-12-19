@@ -105,7 +105,7 @@ fi
 # Connection test script, tests IMAPS, SMTPS, Submission.
 wget https://raw.githubusercontent.com/qmtoaster/scripts/master/conntest && chmod 755 conntest && ./conntest
 
-# Add access to QMT administration from desired network or hosts
+# Add access to QMT administration from desired network or hosts && enable OpenSUSE SSL
 sed -i -e 's/Define aclnet "127.0.0.1"/Define aclnet "192.168.2.0\/24 192.168.9.0\/24 127.0.0.1"/' /etc/httpd/conf/toaster.conf
 sed -i 's|SSLCertificateFile.*|SSLCertificateFile /var/qmail/control/servercert.pem|g' /etc/apache2/vhosts.d/vhost-ssl.template
 sed -i 's|SSLCertificateKeyFile.*|SSLCertificateKeyFile /var/qmail/control/servercert.pem|g' /etc/apache2/vhosts.d/vhost-ssl.template
@@ -128,12 +128,12 @@ systemctl restart httpd
  printf $RED
  echo "Apparmor has been disabled. If connection to the Dovecot IMAP server fails, reboot."
  
- # All squirrelamail access to user preferences file and directories
- #chown wwwrun:www /var/lib/squirrelmail/prefs
- #chmod 755 /var/lib/squirrelmail/prefs
- #mkdir /usr/share/squirrelmail/data 
- #mv /var/lib/squirrelmail/prefs/default_pref /usr/share/squirrelmail/data
- #chmod 644 /usr/share/squirrelmail/data/default_pref
+# All squirrelamail access to user preferences file and directories
+# chown wwwrun:www /var/lib/squirrelmail/prefs
+# chmod 755 /var/lib/squirrelmail/prefs
+# mkdir /usr/share/squirrelmail/data 
+# mv /var/lib/squirrelmail/prefs/default_pref /usr/share/squirrelmail/data
+# chmod 644 /usr/share/squirrelmail/data/default_pref
 
 #update-crypto-policies --set LEGACY
 
