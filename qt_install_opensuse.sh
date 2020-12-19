@@ -11,12 +11,18 @@ TAB="$(printf '\t')" && GREEN=$(tput setaf 2) && RED=$(tput setaf 1) && NORMAL=$
   echo -n "Reload firewall settings : " && tput setaf 2 && firewall-cmd --reload && tput sgr0
   
  # Allow Dovecot access to mail db
- systemctl stop apparmor
- systemctl disable apparmor
- printf $RED
- echo "Apparmor has been disabled. If connection to the Dovecot IMAP server fails, reboot."
- printf $NORMAL
+printf $RED
+echo "Disabling Apparmor..."
+printf $NORMAL
+systemctl stop apparmor &> /dev/null
+systemctl disable apparmor &> /dev/null
+printf $RED
+echo "Apparmor has been disabled. If connection to the Dovecot IMAP server fails, reboot."
+printf $NORMAL
 
+printf $RED
+echo "Installing necessary packages..."
+printf $NORMAL
 zypper update -y
 zypper install -y logwatch bind bind-utils telnet yum-utils chrony acpid at autofs bzip2 \
        smartmontools wget vsftpd fail2ban roundcubemail php-mysql net-tools-deprecated \
@@ -45,9 +51,8 @@ printf $RED
 echo "MariaDB setup completed..."
 printf $NORMAL
 
-
 printf $RED
-echo "Create Vpopmail DB..."
+echo "Creating Vpopmail DB..."
 printf $NORMAL
 mysqladmin --defaults-extra-file=$credfile reload
 mysqladmin --defaults-extra-file=$credfile refresh
@@ -60,12 +65,12 @@ mysql --defaults-extra-file=$credfile -e "GRANT ALL PRIVILEGES ON vpopmail.* TO 
 mysqladmin --defaults-extra-file=$credfile reload
 mysqladmin --defaults-extra-file=$credfile refresh
 printf $RED
-echo "Done with vpopmail database..."
+echo "Created Vpopmail DB..."
 printf $NORMAL
 
 # Add roundcube support
 printf $RED
-echo "Adding roundcubemail support..."
+echo "Create Roundcube DB..."
 printf $NORMAL
 mysql --defaults-extra-file=$credfile -e "create database roundcube character set utf8 collate utf8_bin"
 mysql --defaults-extra-file=$credfile -e "CREATE USER roundcube@localhost IDENTIFIED BY 'p4ssw3rd'"
@@ -73,26 +78,36 @@ mysql --defaults-extra-file=$credfile -e "GRANT ALL PRIVILEGES ON roundcube.* TO
 mysql --defaults-extra-file=$credfile roundcube < /usr/share/doc/packages/roundcubemail/SQL/mysql.initial.sql
 wget -O /etc/roundcubemail/config.inc.php http://www.qmailtoaster.org/rc.default.config
 sed -i 's/^date.timezone.*/date.timezone = "America\/Denver"/' /etc/php7/apache2/php.ini
+printf $RED
+echo "Created Roundcube DB..."
+printf $NORMAL
 
 # Get QMT/OpenSUSE repo
+printf $RED
+echo "Install Mail Server..."
+printf $NORMAL
 curl -o  /etc/zypp/repos.d/qmt.repo  https://raw.githubusercontent.com/qmtoaster/mirrorlist/master/qmt-opensuse152.repo
-
-# Install mail server
 zypper install -y simscan clamav daemontools ucspi-tcp libsrs2 libsrs2-devel \
                   vpopmail spamdyke qmail autorespond control-panel ezmlm \
                   ezmlm-cgi qmailadmin qmailmrtg maildrop maildrop-devel \
                   isoqlog vqadmin squirrelmail ripmime dovecot spamassassin
+printf $RED
+echo "Installed Mail Server..."
+printf $NORMAL         
                
 
+printf $RED
+echo "Adjust mail server settings..."
+printf $NORMAL
 mv /etc/dovecot/dovecot-sql.conf.ext /etc/dovecot/dovecot-sql.conf.ext.bak &> /dev/null
 wget -P /etc/dovecot https://raw.githubusercontent.com/qmtoaster/scripts/master/local.conf
 wget -P /etc/dovecot https://raw.githubusercontent.com/qmtoaster/scripts/master/dovecot-sql.conf.ext
 systemctl relaod dovecot &> /dev/null
 
 # Enable man pages
-echo "Enable QMT man pages..."
 echo "MANDATORY_MANPATH /var/qmail/man" >> /etc/manpath.config
 
+# Smart Daemon
 sed -i 's/smartd_opts=""/smartd_opts="-q never"/' /var/lib/smartmontools/smartd_opts
 sed -i 's/ConditionVirtualization=false/#ConditionVirtualization=false/' /usr/lib/systemd/system/smartd.service
 sed -i 's/DirectoryIndex/DirectoryIndex index.php/' /etc/apache2/httpd.conf
