@@ -83,7 +83,7 @@ echo "Created Roundcube DB..."
 printf $NORMAL
 
 # Remvoe postfix
-zypper remove postfix
+zypper -y remove postfix
 
 # Get QMT/OpenSUSE repo
 printf $RED
@@ -91,7 +91,10 @@ echo "Install Mail Server..."
 printf $NORMAL
 curl -o  /etc/zypp/repos.d/qmt.repo  https://raw.githubusercontent.com/qmtoaster/mirrorlist/master/qmt-opensuse152.repo
 printf $GREEN
-read -p "For Mail server installation uninstall libmilter and break clamav and simscan, this won't hurt the installation...<CR> : " input
+ClamAV requires libmilter1 (There is no provider). Below are the forthcoming prompts, they will not break your installation.
+Solution 3: break clamav...
+Solution 2: break simscan...
+Continue to prompts <CR> :
 printf $NORMAL
 zypper install simscan clamav daemontools ucspi-tcp libsrs2 libsrs2-devel \
                   vpopmail spamdyke qmail autorespond control-panel ezmlm \
