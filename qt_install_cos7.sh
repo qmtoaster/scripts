@@ -127,6 +127,11 @@ qmailctl start &> /dev/null
 chkconfig freshclam off &> /dev/null
 service freshclam stop &> /dev/null
 
+printf $RED
+echo "Downloading ClamAV database..."
+printf $NORMAL
+freshclam
+
 # Start systemd services
 sv=(clamd@scan clamav-freshclam spamassassin dovecot httpd named vsftpd network acpid atd autofs crond ntpd smartd sshd irqbalance)
 for idx in ${!sv[*]}
