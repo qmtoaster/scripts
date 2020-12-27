@@ -48,6 +48,7 @@ fi
 qmailctl start
 qmailctl cdb
 
+sed -i '/priority=7/a \exclude=clamav' /etc/yum.repos.d/qmt.repo
 wget -O /usr/bin/toaststat  https://raw.githubusercontent.com/qmtoaster/scripts/master/toaststat.cos7.new
 
 toaststat
