@@ -57,6 +57,9 @@ if [ -z "$password" ]; then
 fi
 MYSQLPW=$password
 
+credfile=~/sql.cnf
+echo -e "[client]\nuser=root\npassword='$MYSQLPW'\nhost=localhost" > $credfile
+
 # Check the password
 mysqladmin status -uroot -p$MYSQLPW &> /dev/null
 if [ "$?" != "0" ]; then
@@ -173,7 +176,30 @@ if [ "$yesno" = "Y" ] || [ "$yesno" = "y" ]; then
       echo "Empty username or password."
    else
       /home/vpopmail/bin/vadddomain $newdom $newpass
+      sh /usr/share/toaster/isoqlog/bin/cron.sh
    fi
+fi
+
+# Install roundcube mail
+read -p "Install Roundcube [Y/N] : " yesno
+if [ "$yesno" = "Y" ] || [ "$yesno" = "y" ]; then
+   wget https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+   wget https://rpms.remirepo.net/enterprise/remi-release-7.rpm
+   rpm -Uvh remi-release-7.rpm epel-release-latest-7.noarch.rpm
+   yum -y install yum-utils
+   yum-config-manager --enable remi-php74
+   yum -y update
+   yum -y install roundcubemail
+    echo "Adding roundcubemail support..."
+    mysql --defaults-extra-file=$credfile -e "create database roundcube character set utf8 collate utf8_bin"
+    mysql --defaults-extra-file=$credfile -e "CREATE USER roundcube@localhost IDENTIFIED BY 'p4ssw3rd'"
+    mysql --defaults-extra-file=$credfile -e "GRANT ALL PRIVILEGES ON roundcube.* TO roundcube@localhost"
+    mysql --defaults-extra-file=$credfile roundcube < /usr/share/roundcubemail/SQL/mysql.initial.sql
+    cp -p /etc/httpd/conf.d/roundcubemail.conf /etc/httpd/conf.d/roundcubemail.conf.bak && \
+    wget -O /etc/roundcubemail/config.inc.php http://www.qmailtoaster.org/rc.default.config && \
+    wget -O /etc/httpd/conf.d/roundcubemail.conf http://www.qmailtoaster.org/rc.httpd.config
+    sed -i 's/\;date.timezone.*/date.timezone = "America\/Denver"/' /etc/php.ini | sleep 2 | cat /etc/php.ini | grep date.timezone.*=
+    systemctl restart httpd
 fi
 
 # Install Dspam
