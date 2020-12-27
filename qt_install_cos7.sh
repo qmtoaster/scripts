@@ -12,7 +12,7 @@
 #  Failure: Re-run
 #
 #  Updates:
-#  
+#
 TAB="$(printf '\t')"
 GREEN=$(tput setaf 2)
 RED=$(tput setaf 1)
@@ -26,10 +26,11 @@ begin=`date`
 yum -y remove postfix
 
 # Install secondary repos (epel)
-yum -y install epel-release 
+yum -y install epel-release
 yum -y install yum-plugin-priorities
 wget https://github.com/qmtoaster/release/raw/master/qmt-release-1-7.qt.el7.noarch.rpm
 rpm -Uvh qmt-release-1-7.qt.el7.noarch.rpm
+sed -i '/priority=7/a \exclude=clamav spamassassin' /etc/yum.repos.d/qmt.repo
 
 # Install QMT dependencies and accessories
 yum -y install rsync bind-utils bind net-tools zlib-devel mariadb-server mariadb mariadb-devel libev-devel httpd php mrtg expect libidn-devel aspell tmpwatch perl-Time-HiRes \
@@ -91,8 +92,15 @@ echo ""
 sleep 7
 
 # Install QMT
-yum -y install daemontools ucspi-tcp libsrs2 libsrs2-devel vpopmail spamdyke qmail autorespond control-panel ezmlm ezmlm-cgi qmailadmin qmailmrtg maildrop \
-maildrop-devel isoqlog vqadmin squirrelmail spamassassin clamav ripmime simscan mailman mailman-debuginfo dovecot libdomainkeys-devel qmt-plus
+yum -y install clamav clamav-update clamd daemontools ucspi-tcp libsrs2 libsrs2-devel vpopmail spamdyke qmail autorespond control-panel ezmlm ezmlm-cgi qmailadmin qmailmrtg maildrop \
+maildrop-devel isoqlog vqadmin squirrelmail spamassassin ripmime simscan mailman mailman-debuginfo dovecot libdomainkeys-devel qmt-plus
+
+chown clamscan:root /var/qmail/simscan
+chown clamscan:root /var/qmail/bin/simscan
+chmod 0750 /var/qmail/simscan
+chmod 4711 /var/qmail/bin/simscan
+chown -R clamupdate:clamupdate /var/lib/clamav
+sed -i 's/^#LocalSocket /LocalSocket /'  /etc/clamd.d/scan.conf
 
 # Open ports on firewall
 systemctl start firewalld
@@ -113,18 +121,14 @@ tput sgr0
 
 # Start qmail
 qmailctl stop &> /dev/null
-qmailctl start &> /dev/null 
+qmailctl start &> /dev/null
 
 # Stop freshclam under SysV
 chkconfig freshclam off &> /dev/null
 service freshclam stop &> /dev/null
 
 # Start systemd services
-chown root.clamav /run/clamav
-chmod 775 /run/clamav
-CLAMS=clamav-daemon.socket
-CLAMD=clamav-daemon.service
-sv=($CLAMS $CLAMD clamav-freshclam spamd dovecot httpd named vsftpd network acpid atd autofs crond ntpd smartd sshd irqbalance)
+sv=(clamd@scan clamav-freshclam spamassassin dovecot httpd named vsftpd network acpid atd autofs crond ntpd smartd sshd irqbalance)
 for idx in ${!sv[*]}
 do
    temp=${sv[$idx]}
@@ -139,7 +143,7 @@ do
    fi
 done
 
-# Isoqlog 
+# Isoqlog
 sh /usr/share/toaster/isoqlog/bin/cron.sh
 # If this command is not run lo interface will not come up on boot
 # https://bugs.centos.org/view.php?id=7351
@@ -147,7 +151,7 @@ systemctl enable NetworkManager-wait-online.service
 # If this command is not run the ntpd service will not start
 systemctl disable chronyd.service
 # Script to determine all of the necessary toaster daemons
-wget -O /usr/bin/toaststat https://raw.githubusercontent.com/qmtoaster/scripts/master/toaststat.cos7
+wget -O /usr/bin/toaststat  https://raw.githubusercontent.com/qmtoaster/scripts/master/toaststat.cos7.new
 if [ "$?" = "0" ]; then
    chmod 755 /usr/bin/toaststat
    toaststat
