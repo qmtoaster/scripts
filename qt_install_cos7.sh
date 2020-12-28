@@ -187,7 +187,7 @@ if [ "$yesno" = "Y" ] || [ "$yesno" = "y" ]; then
    wget https://rpms.remirepo.net/enterprise/remi-release-7.rpm
    rpm -Uvh remi-release-7.rpm epel-release-latest-7.noarch.rpm
    yum -y install yum-utils patch
-   yum-config-manager --enable remi-php74
+   yum-config-manager --enable remi remi-php74
    yum -y update
    yum -y install roundcubemail
    echo "Adding roundcubemail support..."
