@@ -185,7 +185,8 @@ read -p "Install Roundcube [Y/N] : " yesno
 if [ "$yesno" = "Y" ] || [ "$yesno" = "y" ]; then
 #   wget https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
 #   wget https://rpms.remirepo.net/enterprise/remi-release-7.rpm
-#   rpm -Uvh remi-release-7.rpm epel-release-latest-7.noarch.rpm
+#   rpm -ivh remi-release-7.rpm 
+#   rpm -ivh epel-release-latest-7.noarch.rpm
 #   yum -y install yum-utils patch
 #   yum-config-manager --enable remi remi-php74
 #   yum -y update
@@ -195,12 +196,13 @@ if [ "$yesno" = "Y" ] || [ "$yesno" = "y" ]; then
 #   mysql --defaults-extra-file=$credfile -e "CREATE USER roundcube@localhost IDENTIFIED BY 'p4ssw3rd'"
 #   mysql --defaults-extra-file=$credfile -e "GRANT ALL PRIVILEGES ON roundcube.* TO roundcube@localhost"
 #   mysql --defaults-extra-file=$credfile roundcube < /usr/share/roundcubemail/SQL/mysql.initial.sql
-#   cp -p /etc/httpd/conf.d/roundcubemail.conf /etc/httpd/conf.d/roundcubemail.conf.bak && \
-#   wget -O /etc/roundcubemail/config.inc.php http://www.qmailtoaster.org/rc.default.config && \
+#   cp -p /etc/httpd/conf.d/roundcubemail.conf /etc/httpd/conf.d/roundcubemail.conf.bak
+#   wget -O /etc/roundcubemail/config.inc.php http://www.qmailtoaster.org/rc.default.config
 #   wget -O /etc/httpd/conf.d/roundcubemail.conf http://www.qmailtoaster.org/rc.httpd.config
 #   sed -i 's/\;date.timezone.*/date.timezone = "America\/Denver"/' /etc/php.ini | sleep 2 | cat /etc/php.ini | grep date.timezone.*=
-#   cd /usr/share/toaster/htdocs/mrtg wget http://www.qmailtoaster.org/index.php.patch patch < index.php.patch
-#   cd /usr/share/toaster/include wget http://www.qmailtoaster.org/admin.inc.php.patch && patch < admin.inc.php.patch
+#   cd /usr/share/toaster/htdocs/mrtg && wget http://www.qmailtoaster.org/index.php.patch && patch < index.php.patch
+#   cd /usr/share/toaster/include wget && http://www.qmailtoaster.org/admin.inc.php.patch && patch < admin.inc.php.patch
+#   cd ~/
 #   systemctl restart httpd
 fi
 
