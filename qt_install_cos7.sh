@@ -201,7 +201,7 @@ if [ "$yesno" = "Y" ] || [ "$yesno" = "y" ]; then
 #   wget -O /etc/httpd/conf.d/roundcubemail.conf http://www.qmailtoaster.org/rc.httpd.config
 #   sed -i 's/\;date.timezone.*/date.timezone = "America\/Denver"/' /etc/php.ini | sleep 2 | cat /etc/php.ini | grep date.timezone.*=
 #   cd /usr/share/toaster/htdocs/mrtg && wget http://www.qmailtoaster.org/index.php.patch && patch < index.php.patch
-#   cd /usr/share/toaster/include wget && http://www.qmailtoaster.org/admin.inc.php.patch && patch < admin.inc.php.patch
+#   cd /usr/share/toaster/include && wget http://www.qmailtoaster.org/admin.inc.php.patch && patch < admin.inc.php.patch
 #   cd ~/
 #   systemctl restart httpd
 fi
