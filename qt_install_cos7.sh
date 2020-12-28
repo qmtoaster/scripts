@@ -104,6 +104,7 @@ chmod 0750 /var/qmail/simscan
 chmod 4711 /var/qmail/bin/simscan
 chown -R clamupdate:clamupdate /var/lib/clamav
 sed -i 's/^#LocalSocket /LocalSocket /'  /etc/clamd.d/scan.conf
+sed -i 's/auth_mechanisms = plain login.*/auth_mechanisms = plain login/' /etc/dovecot/toaster.conf
 
 # Open ports on firewall
 systemctl start firewalld
