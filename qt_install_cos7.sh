@@ -189,7 +189,7 @@ if [ "$yesno" = "Y" ] || [ "$yesno" = "y" ]; then
 #   yum -y install yum-utils patch
 #   yum-config-manager --enable remi remi-php74
 #   yum -y update
-#   yum -y install roundcubemail
+#   yum -y install roundcubemail php-mysql
 #   echo "Adding roundcubemail support..."
 #   mysql --defaults-extra-file=$credfile -e "create database roundcube character set utf8 collate utf8_bin"
 #   mysql --defaults-extra-file=$credfile -e "CREATE USER roundcube@localhost IDENTIFIED BY 'p4ssw3rd'"
