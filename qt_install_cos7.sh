@@ -40,7 +40,6 @@ bzip2-devel check-devel curl-devel gmp-devel ncurses-devel libxml2-devel python-
 pam-devel clucene-core-devel expat-devel emacs ocaml procmail wget logwatch vsftpd acpid acpid-sysvinit at autofs ntp smartmontools mod_ssl fail2ban perl-Sys-Hostname-Long \
 perl-Mail-DomainKeys perl-Mail-SPF-Query perl-Mail-SPF nfs-utils bzip2 yum-utils
 
-
 # Set up the db server
 systemctl start mariadb.service
 systemctl enable mariadb.service
