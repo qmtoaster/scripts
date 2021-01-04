@@ -83,20 +83,30 @@ echo "GRANT ALL PRIVILEGES ON vpopmail.* TO vpopmail@localhost IDENTIFIED BY 'Ss
 mysqladmin -uroot -p$MYSQLPW reload
 mysqladmin -uroot -p$MYSQLPW refresh
 
-echo ""
-printf $RED
-printf "%s\n" "*********************************************************************************************************************************************"
-printf $GREEN
-printf "%s\n" "Be patient with the ClamAV RPM install and DB download, mirror speeds may be slow. At peak times a 30 minute wait is not out of the question."
-printf $RED
-printf "%s\n" "*********************************************************************************************************************************************"
-printf  $NORMAL
-echo ""
-sleep 7
+DOVECOTMYSQL=
+read -p "Do you want Many-Domain setup? If you're unsure press [ENTER] (Y/N): " yesno
+yesno=${yesno^^}
+if [ "$yesno" = "Y" ]
+then
+   wget -O /etc/yum.repos.d/qmt-md.repo  https://raw.githubusercontent.com/qmtoaster/mirrorlist/master/qmt-md-centos7.repo
+   yum-config-manager --enable qmt-md-current
+   wget -P /etc/yum.repos.d https://raw.githubusercontent.com/qmtoaster/scripts/master/dovecot.repo
+   yum makecache
+   DOVECOTMYSQL=dovecot-mysql
+fi
 
 # Install QMT
 yum -y install clamav clamav-update clamd daemontools ucspi-tcp libsrs2 libsrs2-devel vpopmail spamdyke qmail autorespond control-panel ezmlm ezmlm-cgi qmailadmin qmailmrtg maildrop \
-maildrop-devel isoqlog vqadmin squirrelmail spamassassin ripmime simscan mailman mailman-debuginfo dovecot libdomainkeys-devel qmt-plus
+maildrop-devel isoqlog vqadmin squirrelmail spamassassin ripmime simscan dovecot $DOVECOTMYSQL libdomainkeys-devel qmt-plus
+
+if [ -f /etc/yum.repos.d/dovecot.repo ]
+then
+   [ -f /etc/dovecot/dovecot.conf ] && mv /etc/dovecot/dovecot.conf /etc/dovecot/dovecot.conf.bak
+   [ -f /etc/dovecot/dovecot-sql.conf.ext ] && mv /etc/dovecot/dovecot-sql.conf.ext /etc/dovecot/dovecot-sql.conf.ext.bak
+   wget -P /etc/dovecot https://raw.githubusercontent.com/qmtoaster/scripts/master/dovecot.conf
+   wget -P /etc/dovecot https://raw.githubusercontent.com/qmtoaster/scripts/master/dovecot-sql.conf.ext
+   systemctl relaod dovecot &> /dev/null
+fi
 
 chown clamscan:root /var/qmail/simscan
 chown clamscan:root /var/qmail/bin/simscan
@@ -104,7 +114,7 @@ chmod 0750 /var/qmail/simscan
 chmod 4711 /var/qmail/bin/simscan
 chown -R clamupdate:clamupdate /var/lib/clamav
 sed -i 's/^#LocalSocket /LocalSocket /'  /etc/clamd.d/scan.conf
-sed -i 's/auth_mechanisms = plain login.*/auth_mechanisms = plain login/' /etc/dovecot/toaster.conf
+[ -f /etc/dovecot/toaster.conf ] && sed -i 's/auth_mechanisms = plain login.*/auth_mechanisms = plain login/' /etc/dovecot/toaster.conf
 
 # Open ports on firewall
 systemctl start firewalld
