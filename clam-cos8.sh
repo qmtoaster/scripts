@@ -22,7 +22,7 @@ chown -R clamupdate:clamupdate /var/lib/clamav
 sed -i 's/^#LocalSocket /LocalSocket /'  /etc/clamd.d/scan.conf
 
 freshclam
-systemctl enable --now   clamd@scan clamav-freshclam
+systemctl enable --now   clamd@scan clamav-freshclam spamassassin
 
 mount | grep "/var/qmail/simscan"
 if [ $? = 0 ]
