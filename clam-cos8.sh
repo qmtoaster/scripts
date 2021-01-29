@@ -3,13 +3,15 @@
 qmailctl stop
 systemctl disable clamav-daemon.socket clamav-daemon.service clamav-freshclam
 systemctl stop clamav-daemon.socket clamav-daemon.service clamav-freshclam
+systemctl stop spamd
 
 rpm -ev --nodeps clamav
+rpm -ev --nodeps spamassassin
 
 yum --disablerepo=qmt-current \
     --disablerepo=qmt-testing \
     --disablerepo=qmt-devel \
-    install clamav clamav-update clamd -y
+    install clamav clamav-update clamd spamassassin -y
 
 chown clamscan:root /var/qmail/simscan
 chown clamscan:root /var/qmail/bin/simscan
