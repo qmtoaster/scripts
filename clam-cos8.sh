@@ -51,5 +51,6 @@ qmailctl cdb
 sed -i 's/CLAMS=clamav-daemon.socket//' /usr/bin/toaststat
 sed -i 's/$CLAMS//' /usr/bin/toaststat
 sed -i 's/CLAMD=clamav-daemon.service/CLAMD=clamd@scan.service/' /usr/bin/toaststat
+sed -i 's/spamd/spamassassin/' /usr/bin/toaststat
 
 toaststat
