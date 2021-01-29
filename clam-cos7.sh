@@ -5,11 +5,12 @@ systemctl disable clamav-daemon.socket clamav-daemon.service clamav-freshclam
 systemctl stop clamav-daemon.socket clamav-daemon.service clamav-freshclam
 
 rpm -ev --nodeps clamav
+rpm -ev --nodeps spamassassin
 
 yum --disablerepo=qmt-current \
     --disablerepo=qmt-testing \
     --disablerepo=qmt-devel \
-    install clamav clamav-update clamd -y
+    install clamav clamav-update clamd spamassassin -y
     
 chown clamscan:root /var/qmail/simscan
 chown clamscan:root /var/qmail/bin/simscan
@@ -20,7 +21,7 @@ chown -R clamupdate:clamupdate /var/lib/clamav
 sed -i 's/^#LocalSocket /LocalSocket /'  /etc/clamd.d/scan.conf
 
 freshclam
-systemctl enable --now   clamd@scan clamav-freshclam
+systemctl enable --now   clamd@scan clamav-freshclam spamassassin
 
 mount | grep "/var/qmail/simscan"
 if [ $? = 0 ]
