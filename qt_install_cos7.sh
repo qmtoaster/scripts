@@ -30,7 +30,6 @@ yum -y install epel-release
 yum -y install yum-plugin-priorities
 wget https://github.com/qmtoaster/release/raw/master/qmt-release-1-7.qt.el7.noarch.rpm
 rpm -Uvh qmt-release-1-7.qt.el7.noarch.rpm
-sed -i '/priority=7/a \exclude=clamav spamassassin' /etc/yum.repos.d/qmt.repo
 
 # Install QMT dependencies and accessories
 yum -y install rsync bind-utils bind net-tools zlib-devel mariadb-server mariadb mariadb-devel libev-devel httpd php mrtg expect libidn-devel aspell tmpwatch perl-Time-HiRes \
@@ -170,7 +169,7 @@ systemctl enable NetworkManager-wait-online.service
 # If this command is not run the ntpd service will not start
 systemctl disable chronyd.service
 # Script to determine all of the necessary toaster daemons
-wget -O /usr/bin/toaststat  https://raw.githubusercontent.com/qmtoaster/scripts/master/toaststat.cos7.new
+wget -O /usr/bin/toaststat  https://raw.githubusercontent.com/qmtoaster/scripts/master/toaststat.cos7
 if [ "$?" = "0" ]; then
    chmod 755 /usr/bin/toaststat
    toaststat
