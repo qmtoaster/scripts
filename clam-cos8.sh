@@ -8,10 +8,7 @@ systemctl stop spamd
 rpm -ev --nodeps clamav
 rpm -ev --nodeps spamassassin
 
-yum --disablerepo=qmt-current \
-    --disablerepo=qmt-testing \
-    --disablerepo=qmt-devel \
-    install clamav clamav-update clamd spamassassin -y
+yum install clamav clamav-update clamd spamassassin -y
 
 chown clamscan:root /var/qmail/simscan
 chown clamscan:root /var/qmail/bin/simscan
