@@ -131,9 +131,6 @@ systemctl enable --now clamd@scan clamav-freshclam dovecot spamassassin httpd ch
 wget -O /usr/bin/toaststat https://raw.githubusercontent.com/qmtoaster/scripts/master/toaststat.cos8
 if [ "$?" = "0" ]; then
    chmod 755 /usr/bin/toaststat
-   sed -i 's/CLAMS=clamav-daemon.socket//' /usr/bin/toaststat
-   sed -i 's/$CLAMS//' /usr/bin/toaststat
-   sed -i 's/CLAMD=clamav-daemon.service/CLAMD=clamd@scan.service/' /usr/bin/toaststat
    toaststat
 fi
 
