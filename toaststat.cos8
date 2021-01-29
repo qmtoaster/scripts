@@ -24,9 +24,6 @@ echo $NORMAL
 [ -f /usr/bin/qmailctl ] && qmailctl stat
 echo ""
 
-CLAMD=clamav-daemon.service
-CLAMS=clamav-daemon.socket
-
 NAMED=
 for ns in djbdns named pdns-recursor
 do
@@ -47,7 +44,7 @@ IRQBALANCE=
 proc=`lscpu | grep ^CPU\(s\): | sed 's/CPU(s)://g' | tr -d '[:space:]'`
 [ $proc -gt 1 ] && IRQBALANCE=irqbalance
 # Toaster server service status
-for sv in $CLAMD $CLAMS clamav-freshclam spamassassin dovecot $DBD httpd $NAMED chronyd sshd crond $VSFTPD acpid atd autofs smartd $IRQBALANCE
+for sv in clamd@scan clamav-freshclam spamassassin dovecot $DBD httpd $NAMED chronyd sshd crond $VSFTPD acpid atd autofs smartd $IRQBALANCE
 do
    systemctl status $sv &> /dev/null
    [ "$?" = "0" ] && COLOR=$GREEN STAT=OK || COLOR=$RED STAT=FAILED
