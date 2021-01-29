@@ -3,6 +3,7 @@
 qmailctl stop
 systemctl disable clamav-daemon.socket clamav-daemon.service clamav-freshclam
 systemctl stop clamav-daemon.socket clamav-daemon.service clamav-freshclam
+systemctl stop spamd
 
 rpm -ev --nodeps clamav
 rpm -ev --nodeps spamassassin
