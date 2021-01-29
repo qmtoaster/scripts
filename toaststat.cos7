@@ -24,21 +24,6 @@ echo $NORMAL
 [ -f /usr/bin/qmailctl ] && qmailctl stat
 echo ""
 
-CLAMS=
-CLAMD=
-[ -f /etc/init.d/clamd ] &&  CLAMD=clamd
-[ -f /usr/lib/systemd/system/clamav-daemon.service ] && CLAMD=clamav-daemon.service
-[ -f /usr/lib/systemd/system/clamav-daemon.socket ] && CLAMS=clamav-daemon.socket
-
-# Change freshclam to start under systemd (Turn off SysV first)
-chkconfig freshclam off &> /dev/null
-service freshclam stop &> /dev/null
-systemctl status clamav-freshclam &> /dev/null
-if [ "$?" != "0" ]; then
-   systemctl enable clamav-freshclam &> /dev/null
-   systemctl start clamav-freshclam &> /dev/null
-fi
-
 NAMED=
 for ns in djbdns named pdns-recursor
 do
@@ -50,7 +35,6 @@ VSFTPD=
 cat /etc/vsftpd/vsftpd.conf | grep listen=NO &> /dev/null
 [ "$?" != "0" ] && VSFTPD=vsftpd
 
-
 SRV="systemd service"
 STAT=
 COLOR=
@@ -58,7 +42,7 @@ IRQBALANCE=
 proc=`lscpu | grep ^CPU\(s\): | sed 's/CPU(s)://g' | tr -d '[:space:]'`
 [ $proc -gt 1 ] && IRQBALANCE=irqbalance
 # Toaster server service status
-for sv in $CLAMD $CLAMS clamav-freshclam spamd dovecot mariadb httpd $NAMED ntpd sshd network crond $VSFTPD acpid atd autofs smartd $IRQBALANCE
+for sv in clamd@scan clamav-freshclam spamassassin dovecot mariadb httpd $NAMED ntpd sshd network crond $VSFTPD acpid atd autofs smartd $IRQBALANCE
 do
    systemctl status $sv &> /dev/null
    [ "$?" = "0" ] && COLOR=$GREEN STAT=OK || COLOR=$RED STAT=FAILED
