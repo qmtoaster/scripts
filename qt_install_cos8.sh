@@ -14,9 +14,6 @@ printf '%s\n%s\n%s\n%s\n%s\n%s\n' '[fedora]' 'name=Fedora 28' 'mirrorlist=file:/
 printf '%s\n%s\n%s\n%s\n%s\n%s\n' "${sites[0]}" "${sites[1]}" "${sites[2]}" "{$sites[3]}" "${sites[4]}" "${sites[5]}" \
    > /etc/yum.repos.d/fedoramirrors
 
-# Rspam mirror
-wget https://rspamd.com/rpm-stable/centos-8/rspamd.repo -O /etc/yum.repos.d/rspamd.repo
-
 # Open necessary firewall port, and disable selinux
 TAB="$(printf '\t')" && GREEN=$(tput setaf 2) && RED=$(tput setaf 1) && NORMAL=$(tput sgr0) && \
   systemctl start firewalld && systemctl enable firewalld && \
@@ -34,6 +31,9 @@ yum -y update && \
   dnf -y module install php:remi-7.4 && \
   yum -y --enablerepo=remi install logwatch bind bind-utils telnet yum-utils chrony acpid at autofs bzip2 \
                                    smartmontools wget vsftpd mod_ssl fail2ban roundcubemail php-mysql
+
+# Rspam mirror
+wget https://rspamd.com/rpm-stable/centos-8/rspamd.repo -O /etc/yum.repos.d/rspamd.repo
 
 # Choose backend MariaDB or MySQL
 read -p "Enter backend database 1) MariaDB 2) MySQL, 1 or 2: " backend
