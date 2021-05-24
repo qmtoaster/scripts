@@ -2,6 +2,21 @@
 
 begin=`date`
 
+# Dspam needs one module from Fedora
+sites=( https://d2lzkl7pfhq30w.cloudfront.net/pub/archive/fedora/linux/releases/28/Everything/x86_64/os/
+http://mirror.math.princeton.edu/pub/fedora-archive/fedora/linux/releases/28/Everything/x86_64/os/
+http://pubmirror1.math.uh.edu/fedora-buffet/archive/fedora/linux/releases/28/Everything/x86_64/os/
+https://pubmirror2.math.uh.edu/fedora-buffet/archive/fedora/linux/releases/28/Everything/x86_64/os/
+http://mirrors.kernel.org/fedora-buffet/archive/fedora/linux/releases/28/Everything/x86_64/os/
+https://dl.fedoraproject.org/pub/archive/fedora/linux/releases/28/Everything/x86_64/os/ )
+printf '%s\n%s\n%s\n%s\n%s\n%s\n' '[fedora]' 'name=Fedora 28' 'mirrorlist=file:///etc/yum.repos.d/fedoramirrors' \
+   'enabled=0' 'gpgcheck=0' 'priority=100' > /etc/yum.repos.d/fedora28.repo
+printf '%s\n%s\n%s\n%s\n%s\n%s\n' "${sites[0]}" "${sites[1]}" "${sites[2]}" "{$sites[3]}" "${sites[4]}" "${sites[5]}" \
+   > /etc/yum.repos.d/fedoramirrors
+
+# Rspam mirror
+wget https://rspamd.com/rpm-stable/centos-8/rspamd.repo -O /etc/yum.repos.d/rspamd.repo
+
 # Open necessary firewall port, and disable selinux
 TAB="$(printf '\t')" && GREEN=$(tput setaf 2) && RED=$(tput setaf 1) && NORMAL=$(tput sgr0) && \
   systemctl start firewalld && systemctl enable firewalld && \
@@ -19,7 +34,6 @@ yum -y update && \
   dnf -y module install php:remi-7.4 && \
   yum -y --enablerepo=remi install logwatch bind bind-utils telnet yum-utils chrony acpid at autofs bzip2 \
                                    smartmontools wget vsftpd mod_ssl fail2ban roundcubemail php-mysql
-
 
 # Choose backend MariaDB or MySQL
 read -p "Enter backend database 1) MariaDB 2) MySQL, 1 or 2: " backend
@@ -72,6 +86,36 @@ mysqladmin --defaults-extra-file=$credfile reload
 mysqladmin --defaults-extra-file=$credfile refresh
 echo "Done with vpopmail database..."
 
+echo "Dropping Dspam database if it exists already..."
+mysql --defaults-extra-file=$credfile -e "use dspam" &> /dev/null
+[ "$?" = "0" ] && mysqldump --defaults-extra-file=$credfile dspam > dspam.sql \
+               && mysql --defaults-extra-file=$credfile -e "drop database dspam" \
+               && echo "dspam db saved to dspam.sql and dropped..."
+
+# Create dspam with correct permissions
+echo "Creating Dspam database..."
+mysqladmin --defaults-extra-file=$credfile reload
+mysqladmin --defaults-extra-file=$credfile refresh
+mysqladmin --defaults-extra-file=$credfile create dspam
+mysqladmin --defaults-extra-file=$credfile reload
+mysqladmin --defaults-extra-file=$credfile refresh
+echo "Adding dspam users and privileges..."
+mysql --defaults-extra-file=$credfile -e "CREATE USER dspam@localhost IDENTIFIED BY 'p4ssw3rd'"
+mysql --defaults-extra-file=$credfile -e "GRANT ALL PRIVILEGES ON dspam.* TO dspam@localhost"
+mysqladmin --defaults-extra-file=$credfile reload
+mysqladmin --defaults-extra-file=$credfile refresh
+echo "Done with dspam database..."
+mysql --defaults-extra-file=$credfile dspam < dspamdb.sql
+mysqladmin --defaults-extra-file=$credfile reload
+mysqladmin --defaults-extra-file=$credfile refresh
+# End DSpam DB install
+
+dnf --enablerepo=fedora install dspam dspam-libs dspam-client dspam-mysql dspam-web rspamd
+systemctl enable --now dspam
+systemctl status dspam
+systemctl enable --now rspamd
+systemctl status rspamd
+
 # Add repos
 curl -o /etc/yum.repos.d/qmt.repo  https://raw.githubusercontent.com/qmtoaster/mirrorlist/master/qmt-centos8.repo
 DOVECOTMYSQL=
@@ -88,6 +132,9 @@ then
 fi
 
 yum -y install clamav-update
+
+
+
 
 # Install Qmail
 yum -y install daemontools spamassassin ucspi-tcp libsrs2 libsrs2-devel vpopmail \
