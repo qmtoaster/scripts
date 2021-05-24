@@ -92,6 +92,13 @@ mysql --defaults-extra-file=$credfile -e "use dspam" &> /dev/null
                && mysql --defaults-extra-file=$credfile -e "drop database dspam" \
                && echo "dspam db saved to dspam.sql and dropped..."
 
+# Get dspam db structure
+wget https://raw.githubusercontent.com/qmtoaster/dspam/master/dspamdb.sql
+if [ "$?" != "0" ]; then
+   echo "Error downloading dspam db: ($?), exiting..."
+   exit 1
+fi
+
 # Create dspam with correct permissions
 echo "Creating Dspam database..."
 mysqladmin --defaults-extra-file=$credfile reload
