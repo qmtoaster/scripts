@@ -110,15 +110,16 @@ mysqladmin --defaults-extra-file=$credfile reload
 mysqladmin --defaults-extra-file=$credfile refresh
 # End DSpam DB install
 
+# Add repos
+curl -o /etc/yum.repos.d/qmt.repo  https://raw.githubusercontent.com/qmtoaster/mirrorlist/master/qmt-centos8.repo
+DOVECOTMYSQL=
+
+# Install Dspam & Rspam
 dnf --enablerepo=fedora install dspam dspam-libs dspam-client dspam-mysql dspam-web rspamd
 systemctl enable --now dspam
 systemctl status dspam
 systemctl enable --now rspamd
 systemctl status rspamd
-
-# Add repos
-curl -o /etc/yum.repos.d/qmt.repo  https://raw.githubusercontent.com/qmtoaster/mirrorlist/master/qmt-centos8.repo
-DOVECOTMYSQL=
 
 read -p "Do you want Many-Domain setup? If you're unsure press [ENTER] (Y/N): " yesno
 yesno=${yesno^^}
@@ -132,9 +133,6 @@ then
 fi
 
 yum -y install clamav-update
-
-
-
 
 # Install Qmail
 yum -y install daemontools spamassassin ucspi-tcp libsrs2 libsrs2-devel vpopmail \
