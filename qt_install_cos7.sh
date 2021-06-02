@@ -31,13 +31,16 @@ yum -y install yum-plugin-priorities
 wget https://github.com/qmtoaster/release/raw/master/qmt-release-1-7.qt.el7.noarch.rpm
 rpm -Uvh qmt-release-1-7.qt.el7.noarch.rpm
 
+# Rspam mirror
+wget https://rspamd.com/rpm-stable/centos-8/rspamd.repo -O /etc/yum.repos.d/rspamd.repo
+
 # Install QMT dependencies and accessories
 yum -y install rsync bind-utils bind net-tools zlib-devel mariadb-server mariadb mariadb-devel libev-devel httpd php mrtg expect libidn-devel aspell tmpwatch perl-Time-HiRes \
 perl-ExtUtils-MakeMaker perl-Archive-Tar perl-Digest-SHA perl-HTML-Parser perl-IO-Zlib perl-Net-DNS perl-NetAddr-IP perl-Crypt-OpenSSL-Bignum \
 perl-Digest-SHA1 perl-Encode-Detect perl-Geo-IP perl-IO-Socket-SSL perl-Mail-DKIM  perl-Razor-Agent perl-Sys-Syslog perl-Net-CIDR-Lite perl-DB_File \
 bzip2-devel check-devel curl-devel gmp-devel ncurses-devel libxml2-devel python-devel sqlite-devel postgresql-devel openldap-devel quota-devel libcap-devel \
 pam-devel clucene-core-devel expat-devel emacs ocaml procmail wget logwatch vsftpd acpid acpid-sysvinit at autofs ntp smartmontools mod_ssl fail2ban perl-Sys-Hostname-Long \
-perl-Mail-DomainKeys perl-Mail-SPF-Query perl-Mail-SPF nfs-utils bzip2 yum-utils
+perl-Mail-DomainKeys perl-Mail-SPF-Query perl-Mail-SPF nfs-utils bzip2 yum-utils rspamd
 
 # Set up the db server
 systemctl start mariadb.service
@@ -160,6 +163,9 @@ do
        printf "%s %11.11s %s %s %s %s %s %s\n" "Systemd service" "$temp:" "${TAB}" "[" "$RED" "FAILED" "$NORMAL" "]"
    fi
 done
+
+systemctl enable --now rspamd
+systemctl status rspamd
 
 # Isoqlog
 sh /usr/share/toaster/isoqlog/bin/cron.sh
