@@ -122,7 +122,7 @@ curl -o /etc/yum.repos.d/qmt.repo  https://raw.githubusercontent.com/qmtoaster/m
 DOVECOTMYSQL=
 
 # Install Dspam & Rspam
-dnf --enablerepo=fedora install dspam dspam-libs dspam-client dspam-mysql dspam-web rspamd
+dnf -y --enablerepo=fedora install dspam dspam-libs dspam-client dspam-mysql dspam-web rspamd
 systemctl enable --now dspam
 systemctl status dspam
 systemctl enable --now rspamd
