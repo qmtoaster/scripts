@@ -223,19 +223,19 @@ if [ "$yesno" = "Y" ] || [ "$yesno" = "y" ]; then
 fi
 
 # Install Dspam
-read -p "Install dspam [Y/N] : " yesno
-if [ "$yesno" = "Y" ] || [ "$yesno" = "y" ]; then
-   wget https://raw.githubusercontent.com/qmtoaster/dspam/master/dspamdb.sh
-   if [ "$?" != "0" ]; then
-      echo "Error downloading dspam installer, exiting..."
-      exit 1
-   fi
-   chmod 755 dspamdb.sh
-   ./dspamdb.sh
-   if [ "$?" != 0 ]; then
-      echo "Error installing dspam"
-   fi
+wget https://raw.githubusercontent.com/qmtoaster/dspam/master/dspamdb.sh
+if [ "$?" != "0" ]; then
+   echo "Error downloading dspam installer, exiting..."
+   exit 1
 fi
+chmod 755 dspamdb.sh
+./dspamdb.sh
+if [ "$?" != 0 ]; then
+   echo "Error installing dspam"
+fi
+systemctl enable --now dspam
+systemctl status dspam
+
 echo "Enable QMT man pages..."
 echo "MANDATORY_MANPATH /var/qmail/man" >> /etc/man_db.conf
 
