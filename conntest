@@ -24,6 +24,22 @@ then
    exit 1
 fi
 
+# If special characters are in username or password curl will fail unless they're replaced
+opass=$pass
+
+spl=('%' '#' '$' '!' '&' "'" '(' ')' '*' '+' ',' '/' ':' ';' '=' '?' '@' '[' ']')
+rep=('%24' '%23' '%21' '%25' '%26' '%27' '%28' '%29' '%2A' '%2B' '%2C' '%2F' '%3A' '%3B' '%3D' '%3F' '%40' '%5B' '%5D')
+
+for i in "${!spl[@]}"; do
+   if [[ "$pass" == *"${spl[$i]}"* ]]; then
+       pass=${pass//${spl[$i]}/${rep[$i]}}
+   fi
+   if [[ "$user" == *"${spl[$i]}"* ]]; then
+       user=${user//${spl[$i]}/${rep[$i]}}
+   fi
+done
+
+
 #bash -c 'echo a login '"$user@$domain $pass"'; while read x; do echo "$x"; done' | openssl s_client -crlf -connect  localhost:993
 
 curl -v --insecure -I imaps://${user}%40${domain}:${pass}@$host &> ./xxx
@@ -34,6 +50,8 @@ then
 else
    echo -n "IMAPS: $user@$domain --> " && tput setaf 1 && echo "failure" && tput sgr0
 fi
+
+pass=$opass
 
 dswak=/usr/local/bin
 [ ! -f $dswak/swaks ] && wget -P $dswak http://www.jetmore.org/john/code/swaks/latest/swaks &> /dev/null && chown root.root $dswak/swaks && chmod +x $dswak/swaks
