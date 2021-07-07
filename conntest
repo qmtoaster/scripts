@@ -23,7 +23,7 @@ echo 'quit'
 }
 
 
-read -p "Enter a valid remote email account to which QMT will send mail via Submission & SMTPS:" ruser
+read -p "Enter a valid remote email account to which QMT will send mail via Submission & SMTPS: " ruser
 if [ -z "$ruser" ]
 then
    echo "No remote user entered, exiting..."
@@ -50,9 +50,9 @@ dswak=/usr/local/bin
 [ ! -f $dswak/swaks ] && wget -P $dswak http://www.jetmore.org/john/code/swaks/latest/swaks &> /dev/null && chown root.root $dswak/swaks && chmod +x $dswak/swaks
 swaks --to $ruser --from $user@$domain --server $host --port 587 --ehlo test -tls --auth login --auth-user $user@$domain --auth-password $pass &> ./xxx
 if [[ ! -z "`grep \"250 ok \" ./xxx`" ]]; then STATUS=success && COLOR=2; else STATUS=failed && COLOR=1; fi
-echo -n "Submission: $user@$domain --> " && tput setaf ${COLOR} && echo ${STATUS} && tput sgr0
+echo -n "Submission: $user@$domain --> $ruser " && echo -n "["  && tput setaf ${COLOR} && echo -n ${STATUS} && tput sgr0 && echo  "]"
 
 swaks --to $ruser --from $user@$domain --server $host --port 465 --ehlo test -tlsc --auth login --auth-user $user@$domain --auth-password $pass &> ./xxx
 if [[ ! -z "`grep \"250 ok \" ./xxx`" ]]; then STATUS=success && COLOR=2; else STATUS=failed && COLOR=1; fi
-echo -n "SMTPS: $user@$domain --> " && tput setaf ${COLOR} && echo ${STATUS} && tput sgr0
+echo -n "SMTPS: $user@$domain --> $ruser " && echo -n "["  && tput setaf ${COLOR} && echo -n ${STATUS} && tput sgr0 && echo  "]"
 rm -f ./xxx
