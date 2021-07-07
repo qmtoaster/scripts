@@ -23,7 +23,7 @@ echo 'quit'
 }
 
 
-read -p "Enter a valid remote email account to which QMT will send mail: " ruser
+read -p "Enter a valid remote email account to which QMT will send mail:" ruser
 if [ -z "$ruser" ]
 then
    echo "No remote user entered, exiting..."
