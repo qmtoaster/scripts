@@ -31,52 +31,28 @@ then
 fi
 
 user=postmaster
-host=`hostname -I`
-
-DOMAINS=/home/vpopmail/domains
-user=postmaster
+host=127.0.0.1
 DOMAINS=/home/vpopmail/domains
 
 for domain in `ls $DOMAINS`
 do
    pass=`/home/vpopmail/bin/vuserinfo $user@$domain | grep "clear passwd: " | sed 's/clear passwd: //'`
 done
-if [ -z "$domain" ]
-then
-   echo "No domain..."
-   exit 1
-fi
+if [ -z "$domain" ]; then echo "No domain..." && exit 1; fi
 
-opass=$pass
-user=$(rplspl $user)
-pass=$(rplspl $pass)
-curl -v --insecure imaps://"${user}"%40"${domain}":"${pass}"@${host} &> ./xxx
-yyy=`cat ./xxx | grep "Logged in"`
-if [[ ! -z $yyy ]]
-then
-   echo -n "IMAPS: $user@$domain --> " && tput setaf 2 && echo "success" && tput sgr0
-else
-   echo -n "IMAPS: $user@$domain --> " && tput setaf 1 && echo "failure" && tput sgr0
-fi
-pass=$opass
+opass=$(rplspl $pass)
+curl -v --insecure imaps://"${user}"%40"${domain}":"${opass}"@${host} &> ./xxx
+#imapscript "$user@$domain" "$pass" | openssl s_client -crlf -connect $host:993 &> ./xxx
+if [[ ! -z "`grep \"Logged in\" ./xxx`" ]]; then STATUS=success && COLOR=2; else STATUS=failed && COLOR=1; fi
+echo -n "IMAPS: $user@$domain --> " && tput setaf ${COLOR} && echo ${STATUS} && tput sgr0
 
 dswak=/usr/local/bin
 [ ! -f $dswak/swaks ] && wget -P $dswak http://www.jetmore.org/john/code/swaks/latest/swaks &> /dev/null && chown root.root $dswak/swaks && chmod +x $dswak/swaks
 swaks --to $ruser --from $user@$domain --server $host --port 587 --ehlo test -tls --auth login --auth-user $user@$domain --auth-password $pass &> ./xxx
-yyy=`cat xxx | grep "250 ok "`
-if [[ ! -z $yyy ]]
-then
-   echo -n "Submission: $user@$domain --> " && tput setaf 2 && echo "success" && tput sgr0
-else
-   echo -n "Submission: $user@$domain --> " && tput setaf 1 && echo "failure" && tput sgr0
-fi
-rm -f ./xxx
+if [[ ! -z "`grep \"250 ok \" ./xxx`" ]]; then STATUS=success && COLOR=2; else STATUS=failed && COLOR=1; fi
+echo -n "Submission: $user@$domain --> " && tput setaf ${COLOR} && echo ${STATUS} && tput sgr0
+
 swaks --to $ruser --from $user@$domain --server $host --port 465 --ehlo test -tlsc --auth login --auth-user $user@$domain --auth-password $pass &> ./xxx
-yyy=`cat xxx | grep "250 ok "`
-if [[ ! -z $yyy ]]
-then
-   echo -n "SMTPS: $user@$domain --> " && tput setaf 2 && echo "success" && tput sgr0
-else
-   echo -n "SMTPS: $user@$domain --> " && tput setaf 1 && echo "failure" && tput sgr0
-fi
+if [[ ! -z "`grep \"250 ok \" ./xxx`" ]]; then STATUS=success && COLOR=2; else STATUS=failed && COLOR=1; fi
+echo -n "SMTPS: $user@$domain --> " && tput setaf ${COLOR} && echo ${STATUS} && tput sgr0
 rm -f ./xxx
