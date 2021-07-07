@@ -58,7 +58,6 @@ then
 else
    echo -n "IMAPS: $user@$domain --> " && tput setaf 1 && echo "failure" && tput sgr0
 fi
-
 pass=$opass
 
 dswak=/usr/local/bin
