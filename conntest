@@ -1,5 +1,28 @@
 #!/bin/bash
 
+function rplspl()
+{
+   spl=('%' '#' '$' '!' '&' "'" '(' ')' '*' '+' ',' '/' ':' ';' '=' '?' '@' '[' ']')
+   rep=('%24' '%23' '%21' '%25' '%26' '%27' '%28' '%29' '%2A' '%2B' '%2C' '%2F' '%3A' '%3B' '%3D' '%3F' '%40' '%5B' '%5D')
+
+   local retval=$1
+
+   for i in "${!spl[@]}"; do
+      if [[ "$retval" == *"${spl[$i]}"* ]]; then
+          retval=${retval//${spl[$i]}/${rep[$i]}}
+      fi
+   done
+   echo "$retval"
+}
+
+function imapscript () {
+echo "a login $1 $2"
+echo 'a logout'
+sleep 1
+echo 'quit'
+}
+
+
 read -p "Enter a valid remote email account to which QMT will send mail: " ruser
 if [ -z "$ruser" ]
 then
@@ -24,26 +47,11 @@ then
    exit 1
 fi
 
-# If special characters are in username or password curl will fail unless they're replaced
 opass=$pass
-
-spl=('%' '#' '$' '!' '&' "'" '(' ')' '*' '+' ',' '/' ':' ';' '=' '?' '@' '[' ']')
-rep=('%24' '%23' '%21' '%25' '%26' '%27' '%28' '%29' '%2A' '%2B' '%2C' '%2F' '%3A' '%3B' '%3D' '%3F' '%40' '%5B' '%5D')
-
-for i in "${!spl[@]}"; do
-   if [[ "$pass" == *"${spl[$i]}"* ]]; then
-       pass=${pass//${spl[$i]}/${rep[$i]}}
-   fi
-   if [[ "$user" == *"${spl[$i]}"* ]]; then
-       user=${user//${spl[$i]}/${rep[$i]}}
-   fi
-done
-
-
-#bash -c 'echo a login '"$user@$domain $pass"'; while read x; do echo "$x"; done' | openssl s_client -crlf -connect  localhost:993
-
-curl -v --insecure -I imaps://${user}%40${domain}:${pass}@$host &> ./xxx
-yyy=`cat ./xxx | grep "OK Logged in"`
+user=$(rplspl $user)
+pass=$(rplspl $pass)
+curl -v --insecure imaps://"${user}"%40"${domain}":"${pass}"@${host} &> ./xxx
+yyy=`cat ./xxx | grep "Logged in"`
 if [[ ! -z $yyy ]]
 then
    echo -n "IMAPS: $user@$domain --> " && tput setaf 2 && echo "success" && tput sgr0
