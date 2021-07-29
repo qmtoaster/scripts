@@ -44,7 +44,7 @@ opass=$(rplspl $pass)
 curl -v --insecure imaps://"${user}"%40"${domain}":"${opass}"@${host} &> ./xxx
 #imapscript "$user@$domain" "$pass" | openssl s_client -crlf -connect $host:993 &> ./xxx
 if [[ ! -z "`grep \"Logged in\" ./xxx`" ]]; then STATUS=success && COLOR=2; else STATUS=failed && COLOR=1; fi
-echo -n "IMAPS: $user@$domain --> " && tput setaf ${COLOR} && echo ${STATUS} && tput sgr0
+echo -n "IMAPS: $user@$domain [" && tput setaf ${COLOR} && echo -n ${STATUS} && tput sgr0 && echo "]"
 
 dswak=/usr/local/bin
 [ ! -f $dswak/swaks ] && wget -P $dswak http://www.jetmore.org/john/code/swaks/latest/swaks &> /dev/null && chown root.root $dswak/swaks && chmod +x $dswak/swaks
