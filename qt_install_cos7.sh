@@ -91,7 +91,7 @@ if [ "$yesno" = "Y" ]
 then
    wget -O /etc/yum.repos.d/qmt-md.repo  https://raw.githubusercontent.com/qmtoaster/mirrorlist/master/qmt-md-centos7.repo
    yum-config-manager --enable qmt-md-current
-   wget -P /etc/yum.repos.d https://raw.githubusercontent.com/qmtoaster/scripts/master/dovecot.repo
+   wget -O /etc/yum.repos.d/dovecot.repo https://raw.githubusercontent.com/qmtoaster/scripts/master/dovecot-7.repo
    yum makecache
    DOVECOTMYSQL=dovecot-mysql
 fi
