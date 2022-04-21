@@ -32,7 +32,7 @@ wget https://github.com/qmtoaster/release/raw/master/qmt-release-1-7.qt.el7.noar
 rpm -Uvh qmt-release-1-7.qt.el7.noarch.rpm
 
 # Rspam mirror
-wget https://rspamd.com/rpm-stable/centos-7/rspamd.repo -O /etc/yum.repos.d/rspamd.repo
+wget --no-check-certificate https://rspamd.com/rpm-stable/centos-7/rspamd.repo -O /etc/yum.repos.d/rspamd.repo
 
 # Install QMT dependencies and accessories
 yum -y install rsync bind-utils bind net-tools zlib-devel mariadb-server mariadb mariadb-devel libev-devel httpd php mrtg expect libidn-devel aspell tmpwatch perl-Time-HiRes \
