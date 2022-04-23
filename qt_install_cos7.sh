@@ -200,7 +200,7 @@ fi
 read -p "Install Roundcube [Y/N] : " yesno
 if [ "$yesno" = "Y" ] || [ "$yesno" = "y" ]; then
    wget https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
-   wget https://rpms.remirepo.net/enterprise/remi-release-7.rpm
+   wget --no-check-certificate https://rpms.remirepo.net/enterprise/remi-release-7.rpm
    rpm -ivh remi-release-7.rpm 
    rpm -ivh epel-release-latest-7.noarch.rpm
    yum -y install yum-utils patch
