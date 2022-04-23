@@ -219,6 +219,9 @@ if [ "$yesno" = "Y" ] || [ "$yesno" = "y" ]; then
    cd /usr/share/toaster/htdocs/mrtg && wget http://www.qmailtoaster.org/index.php.patch && patch < index.php.patch
    cd /usr/share/toaster/include && wget http://www.qmailtoaster.org/admin.inc.php.patch && patch < admin.inc.php.patch
    cd ~/
+   printf $RED
+   read -t 4 -N 1 -p "Disabling Remi update or it will break the session table in roundcube DB`echo $'\n> '`"
+   printf $NORMAL
    yum-config-manager --disable remi remi-php74
    systemctl restart httpd
 fi
