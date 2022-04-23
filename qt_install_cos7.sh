@@ -5,7 +5,7 @@
 #
 #   Author: Eric C. Broch
 #
-#      Use: ./qt_install.sh
+#      Use: ./qt_install_cos7.sh
 #
 #  Warning: This script is not bullet-proof, use at your own risk.
 #
