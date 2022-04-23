@@ -219,6 +219,7 @@ if [ "$yesno" = "Y" ] || [ "$yesno" = "y" ]; then
    cd /usr/share/toaster/htdocs/mrtg && wget http://www.qmailtoaster.org/index.php.patch && patch < index.php.patch
    cd /usr/share/toaster/include && wget http://www.qmailtoaster.org/admin.inc.php.patch && patch < admin.inc.php.patch
    cd ~/
+   yum-config-manager --disable remi remi-php74
    systemctl restart httpd
 fi
 
