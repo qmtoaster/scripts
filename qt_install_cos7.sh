@@ -222,6 +222,7 @@ if [ "$yesno" = "Y" ] || [ "$yesno" = "y" ]; then
    printf $RED
    read -t 4 -N 1 -p "Disabling Remi update or it will break the session table in roundcube DB`echo $'\n> '`"
    printf $NORMAL
+   echo ""
    yum-config-manager --disable remi remi-php74
    systemctl restart httpd
 fi
