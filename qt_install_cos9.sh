@@ -95,6 +95,9 @@ mysqladmin --defaults-extra-file=$credfile reload
 mysqladmin --defaults-extra-file=$credfile refresh
 # End DSpam DB install
 
+wget http://repo.whitehorsetc.com/9/testing/x86_64/qmt-release-1-8.qt.el9.noarch.rpm
+yum -y install qmt-release-1-8.qt.el9.noarch.rpm
+
 # Install Dspam
 dnf -y --enablerepo=fedora install dspam dspam-libs dspam-client dspam-mysql dspam-web
 systemctl enable --now dspam
