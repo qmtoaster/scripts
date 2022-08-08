@@ -97,21 +97,23 @@ mysqladmin --defaults-extra-file=$credfile refresh
 
 wget http://repo.whitehorsetc.com/9/testing/x86_64/qmt-release-1-8.qt.el9.noarch.rpm
 yum -y install qmt-release-1-8.qt.el9.noarch.rpm
+yum-config-manager --enable qmt-testing
+yum-config-manager --disable qmt-current
 
 # Install Dspam
 dnf -y --enablerepo=fedora install dspam dspam-libs dspam-client dspam-mysql dspam-web
 systemctl enable --now dspam
 systemctl status dspam
-systemctl enable --now rspamd
 
 yum -y install clamav-update
 
 # Install Qmail
 yum -y install daemontools spamassassin ucspi-tcp libsrs2 libsrs2-devel vpopmail \
                spamdyke simscan qmail autorespond control-panel ezmlm-idx \
-               ezmlm-idx-cgi qmailadmin qmailmrtg maildrop maildrop-devel \
-               isoqlog vqadmin squirrelmail ripmime dovecot dovecot-mysql \
-               clamd
+               ezmlm-idx-cgi qmailadmin qmailmrtg maildrop isoqlog vqadmin \
+               squirrelmail ripmime dovecot dovecot-mysql clamd
+
+chkconfig qmail on
 
 sed -i 's/softlimit -m.*\\/softlimit -m 256000000 \\/' /var/qmail/supervise/smtp/run
 sed -i 's|/cgi-bin||'  /usr/share/squirrelmail/plugins/qmailadmin_login/config_default.php
@@ -139,6 +141,10 @@ echo "Starting QMT..."
 printf $NORMAL
 qmailctl start
 printf $RED
+
+sed -i 's/ConditionVirtualization=no/ConditionVirtualization=yes/g' /usr/lib/systemd/system/smartd.service
+systemctl daemon-reload
+
 echo "Starting clamd freshclam dovecot spamassassin httpd chronyd acpid atd autofs smartd named, this may take a while..."
 printf $NORMAL
 systemctl enable --now clamd@scan clamav-freshclam dovecot spamassassin httpd chronyd acpid atd autofs smartd named
