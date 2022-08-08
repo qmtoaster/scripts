@@ -149,7 +149,7 @@ echo "Starting clamd freshclam dovecot spamassassin httpd chronyd acpid atd auto
 printf $NORMAL
 systemctl enable --now clamd@scan clamav-freshclam dovecot spamassassin httpd chronyd acpid atd autofs smartd named
 
-wget -O /usr/bin/toaststat https://raw.githubusercontent.com/qmtoaster/scripts/master/toaststat.cos9
+wget -O /usr/local/bin/toaststat https://raw.githubusercontent.com/qmtoaster/scripts/master/toaststat.cos9
 if [ "$?" = "0" ]; then
    chmod 755 /usr/local/bin/toaststat
    toaststat
