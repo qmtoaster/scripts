@@ -101,9 +101,9 @@ yum-config-manager --enable qmt-testing
 yum-config-manager --disable qmt-current
 
 # Install Dspam
-dnf -y --enablerepo=fedora install dspam dspam-libs dspam-client dspam-mysql dspam-web
-systemctl enable --now dspam
-systemctl status dspam
+dnf -y --enablerepo=fedora install dspam dspam-libs dspam-client dspam-mysql dspam-web rspamd
+systemctl enable --now dspam rspamd
+systemctl status dspam rspamd
 
 yum -y install clamav-update
 
