@@ -151,7 +151,7 @@ systemctl enable --now clamd@scan clamav-freshclam dovecot spamassassin httpd ch
 
 wget -O /usr/bin/toaststat https://raw.githubusercontent.com/qmtoaster/scripts/master/toaststat.cos9
 if [ "$?" = "0" ]; then
-   chmod 755 /usr/bin/toaststat
+   chmod 755 /usr/local/bin/toaststat
    toaststat
 fi
 
@@ -171,7 +171,11 @@ if [ "$yesno" = "Y" ] || [ "$yesno" = "y" ]; then
 fi
 
 # Connection test script, tests IMAPS, SMTPS, Submission.
-wget https://raw.githubusercontent.com/qmtoaster/scripts/master/conntest && chmod 755 conntest && ./conntest
+wget -P /usr/local/bin https://raw.githubusercontent.com/qmtoaster/scripts/master/conntest
+if [ "$?" = "0" ]; then
+   chmod 755 /usr/local/bin/conntest
+   conntest
+fi
 
 # Add access to QMT administration from desired network or hosts
 sed -i -e 's/Define aclnet "127.0.0.1"/Define aclnet "192.168.2.0\/24 192.168.9.0\/24 127.0.0.1"/' /etc/httpd/conf/toaster.conf && \
