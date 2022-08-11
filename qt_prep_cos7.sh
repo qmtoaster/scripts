@@ -44,7 +44,7 @@ GREEN=$(tput setaf 2)
 NORMAL=$(tput sgr0)
 
 wget -P /usr/local/bin https://raw.githubusercontent.com/qmtoaster/scripts/master/qmt_host.sh
-chmod 755 qmt_host.sh
+chmod 755 /usr/local/bin/qmt_host.sh
 wget -O /usr/local/bin/qt_install.sh https://raw.githubusercontent.com/qmtoaster/scripts/master/qt_install_cos7.sh
 if [ "$?" != "0" ]; then
    echo $RED
