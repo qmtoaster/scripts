@@ -245,7 +245,12 @@ echo "Enable QMT man pages..."
 echo "MANDATORY_MANPATH /var/qmail/man" >> /etc/man_db.conf
 
 echo "Downloading connection test script"
-wget https://raw.githubusercontent.com/qmtoaster/scripts/master/conntest && chmod 755 conntest
+# Connection test script, tests IMAPS, SMTPS, Submission.
+wget -P /usr/local/bin https://raw.githubusercontent.com/qmtoaster/scripts/master/conntest
+if [ "$?" = "0" ]; then
+   chmod 755 /usr/local/bin/conntest
+   conntest
+fi
 
 echo "CentOS 7 QMT installation complete"
 end=`date`
