@@ -43,15 +43,15 @@ RED=$(tput setaf 1)
 GREEN=$(tput setaf 2)
 NORMAL=$(tput sgr0)
 
-wget https://raw.githubusercontent.com/qmtoaster/scripts/master/qmt_host.sh
+wget -P /usr/local/bin https://raw.githubusercontent.com/qmtoaster/scripts/master/qmt_host.sh
 chmod 755 qmt_host.sh
-wget https://raw.githubusercontent.com/qmtoaster/scripts/master/qt_install_cos7.sh
+wget -O /usr/local/bin/qt_install.sh https://raw.githubusercontent.com/qmtoaster/scripts/master/qt_install_cos7.sh
 if [ "$?" != "0" ]; then
    echo $RED
    echo "QMT Installer (qt_install.sh) did not download, download manually from (https://raw.githubusercontent.com/qmtoaster/scripts/master/)."
    echo $NORMAL
 else
-   chmod 755 qt_install_cos7.sh
+   chmod 755 /usr/local/bin/qt_install_cos7.sh
    echo $GREEN
    echo "QMT Installer (qt_install_cos7.sh) is located in `pwd`, run this script after reboot to complete QMT toaster install."
    echo $NORMAL
