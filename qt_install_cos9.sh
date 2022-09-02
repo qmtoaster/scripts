@@ -109,8 +109,8 @@ yum -y install clamav-update
 
 # Install Qmail
 yum -y install daemontools spamassassin ucspi-tcp libsrs2 libsrs2-devel vpopmail \
-               spamdyke simscan qmail autorespond control-panel ezmlm-idx \
-               ezmlm-idx-cgi qmailadmin qmailmrtg maildrop isoqlog vqadmin \
+               spamdyke simscan qmail autorespond control-panel ezmlm \
+               ezmlm-cgi qmailadmin qmailmrtg maildrop isoqlog vqadmin \
                squirrelmail ripmime dovecot dovecot-mysql clamd
 
 chkconfig qmail on
