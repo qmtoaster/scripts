@@ -128,6 +128,8 @@ systemctl status dspam
 systemctl enable --now rspamd
 systemctl status rspamd
 
+yum -y install clamav-update
+
 read -p "Do you want Many-Domain setup? If you're unsure press [ENTER] (Y/N): " yesno
 yesno=${yesno^^}
 if [ "$yesno" = "Y" ]
@@ -139,14 +141,11 @@ then
    DOVECOTMYSQL=dovecot-mysql
 fi
 
-yum -y install clamav-update
-
 # Install Qmail
 yum -y install daemontools spamassassin ucspi-tcp libsrs2 libsrs2-devel vpopmail \
                spamdyke simscan qmail autorespond control-panel ezmlm \
                ezmlm-cgi qmailadmin qmailmrtg maildrop maildrop-devel \
-               isoqlog vqadmin squirrelmail ripmime dovecot $DOVECOTMYSQL \
-               qmt-plus clamd
+               isoqlog vqadmin squirrelmail ripmime dovecot $DOVECOTMYSQL qmt-plus clamd
  
 sed -i 's/softlimit -m.*\\/softlimit -m 256000000 \\/' /var/qmail/supervise/smtp/run
 sed -i 's|/cgi-bin||'  /usr/share/squirrelmail/plugins/qmailadmin_login/config_default.php
