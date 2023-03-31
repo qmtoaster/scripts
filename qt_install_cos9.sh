@@ -28,7 +28,7 @@ setenforce 0 && sed -i -e 's/SELINUX=enforcing/SELINUX=disabled/' /etc/selinux/c
 # Update minimal
 yum -y update
 dnf -y install dnf-utils epel-release
-dnf -y install logwatch bind bind-utils telnet yum-utils chrony acpid at autofs bzip2 \
+dnf -y install logwatch bind bind-utils telnet yum-utils chrony acpid at autofs bzip2 net-tools \
                smartmontools wget vsftpd mod_ssl fail2ban roundcubemail php-mysqlnd chkconfig
 
 yum -y install mysql mysql-server
