@@ -30,7 +30,7 @@ yum -y update && \
   dnf -y install dnf-utils && \
   dnf -y module install php:remi-7.4 && \
   yum -y --enablerepo=remi install logwatch bind bind-utils telnet yum-utils chrony acpid at autofs bzip2 \
-                                   smartmontools wget vsftpd mod_ssl fail2ban roundcubemail php-mysql
+                                   smartmontools wget vsftpd mod_ssl fail2ban roundcubemail php-mysql net-tools
 
 # Rspam mirror
 wget https://rspamd.com/rpm-stable/centos-8/rspamd.repo -O /etc/yum.repos.d/rspamd.repo
