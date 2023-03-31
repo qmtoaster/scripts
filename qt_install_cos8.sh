@@ -28,7 +28,7 @@ yum -y update && \
   yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm && \
   yum -y install https://rpms.remirepo.net/enterprise/remi-release-8.rpm && \
   dnf -y install dnf-utils && \
-  dnf -y module install php:remi-7.4 && \
+  dnf -y module install php:remi-8.1 && \
   yum -y --enablerepo=remi install logwatch bind bind-utils telnet yum-utils chrony acpid at autofs bzip2 \
                                    smartmontools wget vsftpd mod_ssl fail2ban roundcubemail php-mysql net-tools
 
