@@ -8,7 +8,10 @@
 # fails with Dovecot's vpopmail driver but because Dovecot is dropping support
 # for the vpopmail driver.
 
-if [ "$1" == "" ];
+passwd=
+read -s -p "Enter your MySQL DB management password: " passwd
+echo ""
+if [ "$passwd" == "" ];
 then
    echo "You must enter the MySQL DB management password"
    exit 0
