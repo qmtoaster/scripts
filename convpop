@@ -17,7 +17,7 @@ then
    exit 0
 fi
 
-MYSQLPW=$1
+MYSQLPW=$passwd
 credfile=~/sql.cnf
 echo -e "[client]\nuser=root\npassword='$MYSQLPW'\nhost=localhost" > $credfile
 
