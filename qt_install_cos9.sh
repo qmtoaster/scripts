@@ -31,7 +31,8 @@ dnf -y install dnf-utils epel-release
 dnf -y install logwatch bind bind-utils telnet yum-utils chrony acpid at autofs bzip2 net-tools \
                smartmontools wget vsftpd mod_ssl fail2ban roundcubemail php-mysqlnd chkconfig rsyslog
 
-yum -y install mysql mysql-server
+yum-config-manager --enable crb
+yum -y install mysql mysql-server mysql-common mysql-libs
 
 # MySQL admin password
 read -s -p "Enter mysql password: " password
@@ -101,7 +102,8 @@ yum-config-manager --enable qmt-testing
 yum-config-manager --disable qmt-current
 
 # Install Dspam
-dnf -y --enablerepo=fedora install dspam dspam-libs dspam-client dspam-mysql dspam-web rspamd
+dnf -y --enablerepo=fedora install perl-Mail-MboxParser
+dnf -y install dspam dspam-libs dspam-client dspam-mysql dspam-web rspamd
 systemctl enable --now dspam rspamd
 systemctl status dspam rspamd
 
