@@ -125,7 +125,7 @@ chown -R clamupdate:clamupdate /var/lib/clamav
 [ -f /etc/dovecot/dovecot-sql.conf.ext ] && mv /etc/dovecot/dovecot-sql.conf.ext /etc/dovecot/dovecot-sql.conf.ext.bak
 wget -P /etc/dovecot https://raw.githubusercontent.com/qmtoaster/scripts/master/dovecot.conf
 wget -P /etc/dovecot https://raw.githubusercontent.com/qmtoaster/scripts/master/dovecot-sql.conf.ext
-systemctl relaod dovecot &> /dev/null
+systemctl reload dovecot &> /dev/null
 
 # Until added to qmail
 [ ! -h /usr/sbin/sendmail ] && ln -s /var/qmail/bin/sendmail /usr/sbin/sendmail || echo "sendmail present..."
