@@ -107,7 +107,7 @@ systemctl enable --now dspam rspamd
 systemctl status dspam rspamd
 
 dnf -y install clamav-update
-dnf -y install clamd
+dnf -y install clamd && dnf -y downgrade clamd
 
 # Install Qmail
 dnf -y install daemontools spamassassin ucspi-tcp libsrs2 libsrs2-devel vpopmail \
