@@ -5,7 +5,7 @@ begin=`date`
 printf '%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n' \
                                    '[fedora41]' \
                                    "name=Fedora 41 RPM - x86_64" \
-                                   'baseurl=https://dl.fedoraproject.org/pub/fedora/linux/releases/41/Everything/source/tree/' \
+                                   'baseurl=https://dl.fedoraproject.org/pub/fedora/linux/releases/41/Everything/$basearch/os/' \
                                    'enabled=0' \
                                    'gpgcheck=0' \
                                    'priority=100' \
@@ -101,8 +101,7 @@ wget http://repo.whitehorsetc.com/10/testing/x86_64/qmt-release-1-9.qt.el10.noar
 dnf -y install qmt-release-1-9.qt.el10.noarch.rpm
 
 # Install Dspam
-dnf -y --enablerepo=fedora41 install perl-Mail-MboxParser
-dnf -y install dspam dspam-libs dspam-client dspam-mysql dspam-web rspamd
+dnf -y --enablerepo=fedora41 install dspam dspam-libs dspam-client dspam-mysql dspam-web rspamd
 systemctl enable --now dspam rspamd
 systemctl status dspam rspamd
 
