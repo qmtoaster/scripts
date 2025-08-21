@@ -2,20 +2,20 @@
 
 begin=`date`
 
-printf '%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n' \
-                                   '[fedora41]' \
-                                   "name=Fedora 41 RPM - x86_64" \
-                                   'baseurl=https://dl.fedoraproject.org/pub/fedora/linux/releases/41/Everything/$basearch/os/' \
-                                   'enabled=0' \
-                                   'gpgcheck=0' \
-                                   'priority=100' \
-                                   '[fedora41-source]' \
-                                   "name=Fedora 41 SRPM - x86_64 Source" \
-                                   'baseurl=https://dl.fedoraproject.org/pub/fedora/linux/releases/41/Everything/source/tree/' \
-                                   'enabled=0' \
-                                   'gpgcheck=0' \
-                                   'priority=100' \
-                                    > /etc/yum.repos.d/fedora41.repo
+cat >> /etc/yum.repos.d/fedora41.repo << EOF
+[fedora41]
+name=Fedora 41 RPM - x86_64
+baseurl=https://dl.fedoraproject.org/pub/fedora/linux/releases/41/Everything/\$basearch/os/
+enabled=0
+gpgcheck=0
+priority=100
+[fedora41-source]
+name=Fedora 41 SRPM - x86_64 Source
+baseurl=https://dl.fedoraproject.org/pub/fedora/linux/releases/41/Everything/source/tree/
+enabled=0
+gpgcheck=0
+priority=100
+EOF
 
 # Open necessary firewall port, and disable selinux
 TAB="$(printf '\t')" && GREEN=$(tput setaf 2) && RED=$(tput setaf 1) && NORMAL=$(tput sgr0) && \
