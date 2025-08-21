@@ -2,7 +2,7 @@
 
 begin=`date`
 
-cat >> /etc/yum.repos.d/fedora41.repo << EOF
+cat > /etc/yum.repos.d/fedora41.repo << EOF
 [fedora41]
 name=Fedora 41 RPM - x86_64
 baseurl=https://dl.fedoraproject.org/pub/fedora/linux/releases/41/Everything/\$basearch/os/
