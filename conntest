@@ -47,7 +47,7 @@ if [[ ! -z "`grep \"Logged in\" ./xxx`" ]]; then STATUS=success && COLOR=2; else
 echo -n "IMAPS: $user@$domain [" && tput setaf ${COLOR} && echo -n ${STATUS} && tput sgr0 && echo "]"
 
 dswak=/usr/local/bin
-[ ! -f $dswak/swaks ] && wget -P $dswak http://www.jetmore.org/john/code/swaks/latest/swaks &> /dev/null && chown root.root $dswak/swaks && chmod +x $dswak/swaks
+[ ! -f $dswak/swaks ] && wget -P $dswak http://www.jetmore.org/john/code/swaks/latest/swaks &> /dev/null && chown root:root $dswak/swaks && chmod +x $dswak/swaks
 swaks --to $ruser --from $user@$domain --server $host --port 587 --ehlo test -tls --auth login --auth-user $user@$domain --auth-password $pass &> ./xxx
 if [[ ! -z "`grep \"250 ok \" ./xxx`" ]]; then STATUS=success && COLOR=2; else STATUS=failed && COLOR=1; fi
 echo -n "Submission: $user@$domain --> $ruser " && echo -n "["  && tput setaf ${COLOR} && echo -n ${STATUS} && tput sgr0 && echo  "]"
