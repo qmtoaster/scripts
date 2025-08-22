@@ -197,7 +197,7 @@ sed -i 's/127.0.0.1/127.0.0.1:25/g' config.inc.php
 echo "date.timezone = \"`timedatectl status | grep "zone" | sed -e 's/^[ ]*Time zone: \(.*\) (.*)$/\1/g'`\"" > /etc/php.d/50-qmail.ini
 systemctl restart httpd
 
-echo "CentOS 10 QMT installation complete"
+echo "EL10 QMT installation complete"
 end=`date`
 echo "Start: $begin"
 echo "  End: $end"
