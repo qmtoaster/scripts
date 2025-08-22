@@ -193,7 +193,7 @@ sed -i -e 's/Define aclnet "127.0.0.1"/Define aclnet "192.168.2.0\/24 192.168.9.
  wget -O /etc/httpd/conf.d/roundcubemail.conf http://www.qmailtoaster.org/rc.httpd.config
  cp config.inc.php config.inc.php.bak
  sed -i 's/127.0.0.1/127.0.0.1:25/g' config.inc.php
- sed -i 's/\;date.timezone.*/date.timezone = "America\/Denver"/' /etc/php.ini | sleep 2 | cat /etc/php.ini | grep date.timezone.*=
+ echo "date.timezone = \"`timedatectl status | grep "zone" | sed -e 's/^[ ]*Time zone: \(.*\) (.*)$/\1/g'`\"" > /etc/php.d/50-qmail.ini
  systemctl restart httpd
 
 #update-crypto-policies --set LEGACY
