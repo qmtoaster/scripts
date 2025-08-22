@@ -155,7 +155,7 @@ if [ "$?" = "0" ]; then
    chmod 755 /usr/local/bin/toaststat
    toaststat
 fi
-sed -i 's|tls-cipher-list=TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_128_GCM_SHA256||' /etc/spamdyke/spamdyke.conf
+sed -i 's|tls-cipher-list=.*||' /etc/spamdyke/spamdyke.conf
 
 # Enter domain
 read -p "Enter a domain? [Y/N] : " yesno
