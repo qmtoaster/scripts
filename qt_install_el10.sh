@@ -36,7 +36,7 @@ yum-config-manager --enable crb
 dnf -y install mysql8.4 mysql8.4-server mysql8.4-common mysql8.4-libs
 
 # MySQL admin password
-read -s -p "Enter mysql password: " password
+read -s -p "Enter new MySQL password: " password
 if [ -z "$password" ]; then
    echo "Empty password, exiting..."
    exit 1
