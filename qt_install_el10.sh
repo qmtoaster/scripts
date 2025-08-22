@@ -178,7 +178,7 @@ if [ "$?" = "0" ]; then
    conntest
 fi
 
-# Add access to QMT administration from desired network or hosts
+# Add access to QMT administration from ipv4 subent and lo
 subnet=`ip -4 -br a s | sed -r 's:([0-9]\.)[0-9]{1,3}/:\10/:g' | grep -v lo | awk '{print $3}'`
 sed -i -e "s|Define aclnet \"127.0.0.1\"|Define aclnet \"$subnet 127.0.0.1\"|" /etc/httpd/conf/toaster.conf
 systemctl reload httpd
