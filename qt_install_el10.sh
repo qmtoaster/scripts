@@ -189,10 +189,10 @@ mysql --defaults-extra-file=$credfile -e "create database roundcube character se
 mysql --defaults-extra-file=$credfile -e "CREATE USER roundcube@localhost IDENTIFIED BY 'p4ssw3rd'"
 mysql --defaults-extra-file=$credfile -e "GRANT ALL PRIVILEGES ON roundcube.* TO roundcube@localhost"
 mysql --defaults-extra-file=$credfile roundcube < /usr/share/roundcubemail/SQL/mysql.initial.sql
-cp -p /etc/httpd/conf.d/roundcubemail.conf /etc/httpd/conf.d/roundcubemail.conf.bak && \
-wget -O /etc/roundcubemail/config.inc.php http://www.qmailtoaster.org/rc.default.config && \
-wget -O /etc/httpd/conf.d/roundcubemail.conf http://www.qmailtoaster.org/rc.httpd.config
+cp -p /etc/httpd/conf.d/roundcubemail.conf /etc/httpd/conf.d/roundcubemail.conf.bak
 cp config.inc.php config.inc.php.bak
+wget -O /etc/roundcubemail/config.inc.php http://www.qmailtoaster.org/rc.default.config
+wget -O /etc/httpd/conf.d/roundcubemail.conf http://www.qmailtoaster.org/rc.httpd.config
 sed -i 's/127.0.0.1/127.0.0.1:25/g' config.inc.php
 echo "date.timezone = \"`timedatectl status | grep "zone" | sed -e 's/^[ ]*Time zone: \(.*\) (.*)$/\1/g'`\"" > /etc/php.d/50-qmail.ini
 systemctl restart httpd
