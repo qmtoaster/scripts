@@ -193,7 +193,7 @@ cp -p /etc/httpd/conf.d/roundcubemail.conf /etc/httpd/conf.d/roundcubemail.conf.
 wget -O /etc/roundcubemail/config.inc.php http://www.qmailtoaster.org/rc.default.config
 wget -O /etc/httpd/conf.d/roundcubemail.conf http://www.qmailtoaster.org/rc.httpd.config
 cp /etc/roundcubemail/config.inc.php /etc/roundcubemail/config.inc.php.bak
-sed -i 's/127.0.0.1/127.0.0.1:25/g' config.inc.php
+sed -i 's/127.0.0.1/127.0.0.1:25/g' /etc/roundcubemail/config.inc.php
 echo "date.timezone = \"`timedatectl status | grep "zone" | sed -e 's/^[ ]*Time zone: \(.*\) (.*)$/\1/g'`\"" > /etc/php.d/50-qmail.ini
 systemctl restart httpd
 
