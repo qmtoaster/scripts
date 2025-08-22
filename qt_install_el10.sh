@@ -183,18 +183,18 @@ sed -i -e 's/Define aclnet "127.0.0.1"/Define aclnet "192.168.2.0\/24 192.168.9.
   systemctl reload httpd
 
 # Add roundcube support
- echo "Adding roundcubemail support..."
- mysql --defaults-extra-file=$credfile -e "create database roundcube character set utf8 collate utf8_bin"
- mysql --defaults-extra-file=$credfile -e "CREATE USER roundcube@localhost IDENTIFIED BY 'p4ssw3rd'"
- mysql --defaults-extra-file=$credfile -e "GRANT ALL PRIVILEGES ON roundcube.* TO roundcube@localhost"
- mysql --defaults-extra-file=$credfile roundcube < /usr/share/roundcubemail/SQL/mysql.initial.sql
- cp -p /etc/httpd/conf.d/roundcubemail.conf /etc/httpd/conf.d/roundcubemail.conf.bak && \
- wget -O /etc/roundcubemail/config.inc.php http://www.qmailtoaster.org/rc.default.config && \
- wget -O /etc/httpd/conf.d/roundcubemail.conf http://www.qmailtoaster.org/rc.httpd.config
- cp config.inc.php config.inc.php.bak
- sed -i 's/127.0.0.1/127.0.0.1:25/g' config.inc.php
- echo "date.timezone = \"`timedatectl status | grep "zone" | sed -e 's/^[ ]*Time zone: \(.*\) (.*)$/\1/g'`\"" > /etc/php.d/50-qmail.ini
- systemctl restart httpd
+echo "Adding roundcubemail support..."
+mysql --defaults-extra-file=$credfile -e "create database roundcube character set utf8 collate utf8_bin"
+mysql --defaults-extra-file=$credfile -e "CREATE USER roundcube@localhost IDENTIFIED BY 'p4ssw3rd'"
+mysql --defaults-extra-file=$credfile -e "GRANT ALL PRIVILEGES ON roundcube.* TO roundcube@localhost"
+mysql --defaults-extra-file=$credfile roundcube < /usr/share/roundcubemail/SQL/mysql.initial.sql
+cp -p /etc/httpd/conf.d/roundcubemail.conf /etc/httpd/conf.d/roundcubemail.conf.bak && \
+wget -O /etc/roundcubemail/config.inc.php http://www.qmailtoaster.org/rc.default.config && \
+wget -O /etc/httpd/conf.d/roundcubemail.conf http://www.qmailtoaster.org/rc.httpd.config
+cp config.inc.php config.inc.php.bak
+sed -i 's/127.0.0.1/127.0.0.1:25/g' config.inc.php
+echo "date.timezone = \"`timedatectl status | grep "zone" | sed -e 's/^[ ]*Time zone: \(.*\) (.*)$/\1/g'`\"" > /etc/php.d/50-qmail.ini
+systemctl restart httpd
 
 echo "CentOS 10 QMT installation complete"
 end=`date`
