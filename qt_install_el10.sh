@@ -143,8 +143,8 @@ printf $NORMAL
 qmailctl start
 printf $RED
 
+# Set smartd for virtualization
 sed -i 's/ConditionVirtualization=no/ConditionVirtualization=yes/g' /usr/lib/systemd/system/smartd.service
-systemctl daemon-reload
 
 # Apache makes filessystem read-only for cgi scripts change it so the qmailadmin and vqadmin work properly
 sed -i 's/ProtectHome=.*/ProtectHome=no/g' /usr/lib/systemd/system/httpd.service
