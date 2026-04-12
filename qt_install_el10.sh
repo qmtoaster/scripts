@@ -30,7 +30,8 @@ setenforce 0 && sed -i -e 's/SELINUX=enforcing/SELINUX=disabled/' /etc/selinux/c
 dnf -y update
 dnf -y install dnf-utils epel-release
 dnf -y install logwatch bind bind-utils telnet yum-utils chrony acpid at autofs bzip2 net-tools \
-               smartmontools wget vsftpd mod_ssl fail2ban roundcubemail php-mysqlnd chkconfig rsyslog
+               smartmontools wget vsftpd mod_ssl fail2ban roundcubemail php-mysqlnd chkconfig rsyslog \
+               --exclude=exim
 
 yum-config-manager --enable crb
 dnf -y install mysql8.4 mysql8.4-server mysql8.4-common mysql8.4-libs
