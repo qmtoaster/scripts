@@ -2,16 +2,16 @@
 
 begin=`date`
 
-cat > /etc/yum.repos.d/fedora41.repo << EOF
-[fedora41]
-name=Fedora 41 RPM - x86_64
-baseurl=https://dl.fedoraproject.org/pub/fedora/linux/releases/41/Everything/\$basearch/os/
+cat > /etc/yum.repos.d/fedora42.repo << EOF
+[fedora42]
+name=Fedora 42 RPM - x86_64
+baseurl=https://dl.fedoraproject.org/pub/fedora/linux/releases/42/Everything/\$basearch/os/
 enabled=0
 gpgcheck=0
 priority=100
-[fedora41-source]
-name=Fedora 41 SRPM - x86_64 Source
-baseurl=https://dl.fedoraproject.org/pub/fedora/linux/releases/41/Everything/source/tree/
+[fedora42-source]
+name=Fedora 42 SRPM - x86_64 Source
+baseurl=https://dl.fedoraproject.org/pub/fedora/linux/releases/42/Everything/source/tree/
 enabled=0
 gpgcheck=0
 priority=100
