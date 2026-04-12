@@ -117,6 +117,13 @@ dnf -y install daemontools spamassassin ucspi-tcp libsrs2 libsrs2-devel vpopmail
 
 chkconfig qmail on
 
+WORKING=`pwd`
+cd /usr/share/squirrelmail/plugins
+wget http://www.squirrelmail.org/plugins/qmailadmin_login-1.1-1.4.3.tar.gz
+tar zxvf qmailadmin_login-1.1-1.4.3.tar.gz
+chown root:root -R qmailadmin_login && chmod +x qmailadmin_login
+cd $WORKING
+
 sed -i 's/softlimit -m.*\\/softlimit -m 256000000 \\/' /var/qmail/supervise/smtp/run
 sed -i 's|/cgi-bin||'  /usr/share/squirrelmail/plugins/qmailadmin_login/config_default.php
 sed -i -z 's/#LocalSocket/LocalSocket/2' /etc/clamd.d/scan.conf
