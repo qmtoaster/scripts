@@ -102,7 +102,7 @@ wget http://repo.whitehorsetc.com/10/testing/x86_64/qmt-release-1-9.qt.el10.noar
 dnf -y install qmt-release-1-9.qt.el10.noarch.rpm
 
 # Install Dspam
-dnf -y --enablerepo=fedora41 install dspam dspam-libs dspam-client dspam-mysql dspam-web rspamd
+dnf -y --enablerepo=fedora42 install dspam dspam-libs dspam-client dspam-mysql dspam-web rspamd
 systemctl enable --now dspam rspamd
 systemctl status dspam rspamd
 
